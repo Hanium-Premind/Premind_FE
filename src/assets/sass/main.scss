@@ -149,12 +149,62 @@
         }
       }
     }
-    .section last{
-        .p{
-            font-size:32px;
-            font-size: semi-bold;
-            color: #58626C;
-        }
+    .slide-section {
+    .section-title {
+      text-align: center;
+      margin-bottom: 24px;
+      font-size: 1.5rem;
+      color: #333;
     }
+
+    .slider-wrapper {
+      position: relative;
+      overflow: hidden;
+
+      .image-slider {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+
+        .slide {
+          flex: 0 0 100%;
+          scroll-snap-align: start;
+          position: relative;
+
+          img {
+            width: 100%;
+            height: auto;
+            display: block;
+          }
+        }
+      }
+
+      .pagination-dots {
+        display: flex;
+        justify-content: center;
+        margin-top: 12px;
+
+        .dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: #ccc;
+          margin: 0 6px;
+          cursor: pointer;
+          transition: background 0.2s;
+
+          &.active {
+            background: #28a745;
+          }
+        }
+      }
+    }
+  }
   }
 }
