@@ -2,9 +2,27 @@ import '../assets/sass/main.scss';
 import content1 from '../assets/img/content1.svg';
 import line from '../assets/img/line.png';
 import lb from '../assets/img/logoblk.svg';
+<<<<<<< HEAD
 import S1 from '../assets/img/service1.svg';
 
 export default function MainPage() {
+=======
+import SliderSection from '../components/mainslider';
+import S1 from '../assets/img/service1.svg';
+import S2 from '../assets/img/service2.svg'
+
+export default function MainPage() {
+   const slides = [
+    {
+      title: '1. 면접 모드별 선택',
+      img : S1,
+    },
+    {
+      title: '2. 최종 면접 보고서를 통한 피드백',
+      img: S2,
+    },
+  ];
+>>>>>>> 30b8798a7d2ac664e3f4f1235f53353bb3ac84bc
   return (
     <div className="main-page">
       <section className="section hero">
@@ -45,9 +63,15 @@ export default function MainPage() {
             <button className="start-btn">지금 바로 시작해보기</button>
             </div>
     </section>    
+<<<<<<< HEAD
     <section className="section last">
         <p>1. 면접 모드별 선택</p>
     </section>    
+=======
+
+    <SliderSection slides={slides} />
+   
+>>>>>>> 30b8798a7d2ac664e3f4f1235f53353bb3ac84bc
     </div>
   );
 }
