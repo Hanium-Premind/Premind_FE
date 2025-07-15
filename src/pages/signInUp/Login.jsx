@@ -1,7 +1,5 @@
-// src/pages/Login.js
-import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../Navbar';  // Header.js 위치에 따라 경로를 바꿔주세요
+import Header from '../Navbar'; 
 
 function Login() {
   const navigate = useNavigate();
