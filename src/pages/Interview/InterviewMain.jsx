@@ -1,10 +1,11 @@
-import '../assets/sass/interview.scss';
+import '../../assets/sass/interview.scss';
+import { useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
-import intIcon1 from '../assets/img/int1.svg';
-import intIcon2    from '../assets/img/mode_real.svg';
-import intIcon3   from '../assets/img/mode_review.svg';
+import intIcon1 from '../../assets/img/intIcon1.png';
+import intIcon2 from '../../assets/img/intIcon2.png';
+import intIcon3 from '../../assets/img/intIcon3.png';
 
 const MODES = [
   {
@@ -46,7 +47,7 @@ export default function InterviewSetup() {
 
   return (
     <div className="interview-setup">
-      <h1 className="setup-title">모의 면접 설정</h1>
+      <p className="setup-title">모의 면접 설정</p>
 
       <div className="mode-cards">
         {MODES.map(mode => (
@@ -59,7 +60,7 @@ export default function InterviewSetup() {
               <h2>{mode.title}</h2>
             </div>
             <div className="card-body">
-              <p>{mode.desc1}</p>
+              <p>{mode.desc1}</p><br/>
               <p>{mode.desc2}</p>
               {/* import 해온 SVG를 src에 바로 넣습니다 */}
               <img src={mode.img} alt={mode.title} />
