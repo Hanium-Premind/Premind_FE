@@ -37,8 +37,15 @@
       padding: 24px;
 
       &.active {
-        box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-        transform: translateY(-4px);
+        background: #379A6F;
+        color: #fff;
+
+          .select-btn {
+          opacity: 1;
+          background: #fff;
+          color: #379A6F;
+          }
+
       }
 
       .card-header {
@@ -154,4 +161,39 @@
       }
     }
   }
+  .question-count-section {
+    max-width: 640px;
+    margin: 0 auto 40px;
+    text-align: left;
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+    }
+    .section-sub {
+      font-size: 0.95rem;
+      color: #666;
+      margin-bottom: 16px;
+    }
+
+    .count-control {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+
+      .count-select {
+        padding: 8px 12px;
+        font-size: 1rem;
+        border: 1px solid #28a745;
+        border-radius: 6px;
+        appearance: none; 
+        background-size: 12px;
+        width: 120px;
+        cursor: pointer;
+      }
+    }
+  }
+
 }
