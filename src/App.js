@@ -19,7 +19,7 @@ const App = () => {
         {/* ✅ 각 페이지 라우팅 */}
         <Route path="/" element={<Home />} />
         <Route path="/interview" element={<Interview />} />
-        <Route path="/interview-practice" element={<InterviewPractice />} />
+        <Route path="/interview/practice" element={<InterviewPractice />} />
         {/* <Route path="/portfolio" element={<Portfolio />} /> */}
         {/* <Route path="/mypage" element={<MyPage />} /> */}
         {/* <Route path="/signup" element={<Signup />} /> */}

@@ -14,7 +14,7 @@ const MODES = [
     desc1: '면접 부담 없이 편안하게 몇 번이든',
     desc2: '내가 원하는 대로!',
     img: intIcon1,             
-    path: '/interview/practice',
+    path: '/interview/practice' ,
   },
   {
     id: 'real',
@@ -47,7 +47,7 @@ export default function InterviewSetup() {
 
   return (
     <div className="interview-setup">
-      <p className="setup-title">모의 면접 설정</p>
+      <h2 className="setup-title">모의 면접 설정</h2>
 
       <div className="mode-cards">
         {MODES.map(mode => (
@@ -62,7 +62,6 @@ export default function InterviewSetup() {
             <div className="card-body">
               <p>{mode.desc1}</p><br/>
               <p>{mode.desc2}</p>
-              {/* import 해온 SVG를 src에 바로 넣습니다 */}
               <img src={mode.img} alt={mode.title} />
             </div>
             <button
@@ -91,7 +90,7 @@ export default function InterviewSetup() {
               onClick={() => setSelectedType(type.id)}
             >
               <div className="type-info">
-                <h3>{type.title}</h3>
+                <p>{type.title}</p>
                 <p>{type.desc}</p>
               </div>
               <div className="type-radio">
