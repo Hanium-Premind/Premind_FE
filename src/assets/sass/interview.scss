@@ -45,6 +45,11 @@
           background: #fff;
           color: #379A6F;
           }
+          .card-body{
+            p{
+              color:#fff;
+            }
+          }
 
       }
 
@@ -111,6 +116,7 @@
     }
 
     ul {
+      background-color: #FBFBFB;
       list-style: none;
       padding: 0;
       margin: 0;
@@ -196,4 +202,227 @@
     }
   }
 
+
+/* ─── 면접관 유형 섹션 ─── */
+.interviewer-section {
+  width: 100%;
+  background-color: #FBFBFB;
+  padding: 60px 20px;
+  font-family: 'Pretendard Variable';
+
+  .section-title {
+     max-width: 640px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #58626C;
+    margin-bottom: 8px;
+  }
+  .section-sub {
+    font-size: 0.95rem;
+    color: #58626C;
+    max-width: 640px;
+    margin-bottom: 40px;
+  }
+
+  .interviewer-cards {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    max-width: 740px;
+    margin: 0 auto;
+
+    .interviewer-card {
+      flex: 1;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    
+      cursor: pointer;
+
+      .iv-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background-color: #DDD;
+        margin-bottom: 16px;
+      }
+
+      p {
+        font-size: 1.25rem;
+        color: #58626C;
+        margin-bottom: 12px;
+      }
+
+      .iv-desc1,
+      .iv-desc2 {
+        font-size: 14px;
+        color: #58626C;
+        line-height: 1.4;
+        margin: 4px 0;
+        text-align: center;
+      }
+      .iv-desc2{
+        max-width: 129px;
+      }
+
+      .select-btn {
+        margin-top: 40px;
+        background-color: #58626C;
+        color: #fff;
+        border: none;
+        padding: 8px 24px;
+        border-radius: 20px;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+
+      &.active .select-btn {
+        background: #fff;
+        color: #379A6F;
+        border: 2px solid #379A6F;
+      }
+    }
+  }
+}
+
+/* PAPER SECTION (자기소개서 / 포트폴리오) 스타일 */
+
+.paper-section {
+  width: 100%;
+  background: #fff;
+  padding: 60px 20px;
+
+  .section-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .section-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #58626C;
+    margin-bottom: 16px;
+    text-align: left;
+  }
+
+  /* 드롭다운 박스 래퍼 */
+  .custom-dropdown {
+    position: relative;
+    width: 100%;
+    margin-bottom: 12px;
+
+    summary {
+      list-style: none;
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #379A6F;
+      border-radius: 6px;
+      font-size: 1rem;
+      color: #666;
+      background: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    /* 기본 브라우저 마커 숨기기 */
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .arrow {
+      width: 12px;
+      height: 12px;
+      background: url('../../assets/img/drop.png') no-repeat center;
+      background-size: contain;
+      transition: transform 0.2s;
+    }
+    /* open 시 화살표 뒤집기 */
+    &[open] .arrow {
+      transform: rotate(180deg);
+    }
+
+    ul {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      width: 100%;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 10;
+    }
+
+    ul li {
+      padding: 10px 16px;
+      font-size: 1rem;
+      color: #333;
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+
+    ul li:hover {
+      background: #f0f9f4;
+    }
+  }
+
+  /* 포트폴리오 섹션에서만 사용: 선택 없을 때 안내문 우측 정렬 */
+  .optional-note {
+    font-size: 0.9rem;
+    color: #777;
+    margin-bottom: 16px;
+    align-self: flex-end;
+  }
+
+  .new-btn {
+    margin-top: 12px;
+    background: #58626C;
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    align-self: center;
+
+    &:hover {
+      background: #379A6F;
+    }
+  }
+}
+
+/* COMPLETE 버튼 스타일 (페이지 하단 우측)       */
+.complete-container {
+  width: 100%;
+  padding: 0 20px 40px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  .complete-btn {
+    background: #379A6F;
+    color: #fff;
+    border: none;
+    padding: 12px 32px;
+    font-size: 1rem;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: background 0.3s;
+
+    &:hover {
+      background: #218838;
+    }
+  }
+}
 }

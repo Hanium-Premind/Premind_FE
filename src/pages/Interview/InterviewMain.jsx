@@ -1,5 +1,5 @@
 import '../../assets/sass/interview.scss';
-import { useState} from 'react';
+import { useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -7,6 +7,8 @@ import intIcon1 from '../../assets/img/intIcon1.png';
 import intIcon2 from '../../assets/img/intIcon2.png';
 import intIcon3 from '../../assets/img/intIcon3.png';
 import ivIcon from '../../assets/img/Icons.png';
+
+
 
 const MODES = [
   {
@@ -35,7 +37,7 @@ const MODES = [
 const INTERVIEWERS = [
   {
     id: 'strict',
-    title: '깔끔한',
+    title: '깐깐한',
     desc1: '집요하게 물어보는 면접관입니다.',
     desc2: '작은 것 하나도 놓치지 말고 준비하세요',
     icon: ivIcon
@@ -69,12 +71,60 @@ export default function InterviewSetup() {
   const [selectedInterviewer, setSelectedInterviewer] = useState(null);
   const [resume, setResume] = useState('');
   const [portfolio, setPortfolio] = useState('');
-  const navigate = useNavigate();
+  const [resumes, setResumes] = useState([]);
+  const [portfolios, setPortfolios] = useState([]);
+  const [loadingResumes, setLoadingResumes] = useState(true);
+  const [loadingPortfolios, setLoadingPortfolios] = useState(true);
 
   const handleSelectMode = (modeId) => {
     setSelectedMode(modeId);
     // TODO: 백엔드로 선택값 전송하는 로직 추가하기
   };
+
+  useEffect(() => {
+    // GET /resume/list
+    fetch('/resume/list', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch resumes');
+        return res.json();
+      })
+      .then(data => {
+        setResumes(data);          // [{ id, title }, …]
+      })
+      .catch(err => {
+        console.error(err);
+      })
+      .finally(() => {
+        setLoadingResumes(false);
+      });
+
+    // GET /portfolio/list
+    fetch('/portfolio/list', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch portfolios');
+        return res.json();
+      })
+      .then(data => {
+        setPortfolios(data);       // [{ id, title }, …]
+      })
+      .catch(err => {
+        console.error(err);
+      })
+      .finally(() => {
+        setLoadingPortfolios(false);
+      });
+  }, []);
+
 
   return (
     <div className="interview-setup">
@@ -131,6 +181,7 @@ export default function InterviewSetup() {
           ))}
         </ul>
       </div>
+
       {/* 3. 연습 모드일 때만: 질문 갯수 드롭다운 */}
       {selectedMode === 'practice' && (
         <section className="question-count-section">
@@ -174,7 +225,7 @@ export default function InterviewSetup() {
               onClick={() => setSelectedInterviewer(iv.id)}
             >
               <img src={iv.icon} alt={iv.title} className="iv-icon" />
-              <h3>{iv.title}</h3>
+              <p>{iv.title}</p>
               <p className="iv-desc1">{iv.desc1}</p>
               <p className="iv-desc2">{iv.desc2}</p>
               <button
@@ -190,16 +241,60 @@ export default function InterviewSetup() {
         </div>
       </section>
 
-      {/* 5. 완료 버튼 */}
+      {/* 5. 자소서 & 포폴*/}
+      <section className="paper-section">
+        <div className="section-inner">
+          <h2 className="section-title">자기소개서</h2>
+          {loadingResumes ? (
+            <p>로딩 중...</p>
+          ) : (
+            <details className="custom-dropdown">
+              <summary className={resume ? 'selected' : ''}>
+                {resume || '이번 면접에 사용할 자기소개서를 선택해주세요'}
+                <span className="arrow" />
+              </summary>
+              <ul>
+                {resumes.map(r => (
+                  <li key={r.id} onClick={() => setResume(r.title)}>
+                    {r.title}
+                  </li>
+                ))}
+              </ul>
+            </details>
+          )}
+          <button className="new-btn">새로 작성하기</button>
+        </div>
+      </section>
+
+      <section className="paper-section">
+        <div className="section-inner">
+          <h2 className="section-title">포트폴리오</h2>
+          {loadingPortfolios ? (
+            <p>로딩 중...</p>
+          ) : (
+            <details className="custom-dropdown">
+              <summary className={portfolio ? 'selected' : ''}>
+                {portfolio || '이번 면접에 사용할 포트폴리오를 선택해주세요'}
+                <span className="arrow" />
+              </summary>
+              <ul>
+                {portfolios.map(p => (
+                  <li key={p.id} onClick={() => setPortfolio(p.title)}>
+                    {p.title}
+                  </li>
+                ))}
+              </ul>
+            </details>
+          )}
+          <p className="optional-note">
+            포트폴리오는 없어도 면접 진행이 가능합니다.
+          </p>
+          <button className="new-btn">새로 작성하기</button>
+        </div>
+      </section>
+
       <div className="complete-container">
-        <button
-          className="complete-btn"
-          onClick={() => {
-            /* onComplete 로직 */
-          }}
-        >
-          면접 설정완료
-        </button>
+        <button className="complete-btn">면접 설정완료</button>
       </div>
     </div>
   );
