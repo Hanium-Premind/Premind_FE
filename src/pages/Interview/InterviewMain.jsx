@@ -1,6 +1,6 @@
 import '../../assets/sass/interview.scss';
 import { useState, useEffect} from 'react';
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 
 
 import intIcon1 from '../../assets/img/intIcon1.png';

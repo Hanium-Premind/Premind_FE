@@ -1,0 +1,54 @@
+.footer {
+
+  height:10rem;
+  padding: 40px 20px;
+  text-align: center;
+  font-family: 'Pretendard Variable';
+  color: #58626C;
+  display: flex;
+  flex-direction: column;
+
+  &__menu {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-bottom: 24px;
+    padding: 0;
+    list-style: none;
+
+    li {
+      cursor: pointer;
+      font-size: 0.875rem;
+      color: #58626C;
+      transition: color 0.2s;
+
+      &:hover {
+        color: #379A6F;
+      }
+    }
+  }
+
+  &__social {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 24px;
+
+    svg {
+      font-size: 1.5rem;
+      color: #58626C;
+      cursor: pointer;
+      transition: color 0.2s;
+
+      &:hover {
+        color: #379A6F;
+      }
+    }
+  }
+
+  &__copy {
+    font-size: 0.75rem;
+    color: #999;
+  }
+}

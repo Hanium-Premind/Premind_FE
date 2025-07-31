@@ -3,6 +3,7 @@ import './assets/sass/common.scss';
 import Navbar from './pages/Navbar';
 import Home from './pages/Home';
 import Interview from './pages/Interview/InterviewMain';
+import Footer from './components/Footer';
 
 // import InterviewRecords from './pages/Interview/InterviewRecords';
 // import Portfolio from './pages/Portfolio';
@@ -13,18 +14,22 @@ import Interview from './pages/Interview/InterviewMain';
 const App = () => {
   return (
     <Router>
-      <Navbar />
-
-      <Routes>
-        {/* ✅ 각 페이지 라우팅 */}
-        <Route path="/" element={<Home />} />
-        <Route path="/interview" element={<Interview />} />
-        {/* <Route path="/portfolio" element={<Portfolio />} /> */}
-        {/* <Route path="/mypage" element={<MyPage />} /> */}
-        {/* <Route path="/signup" element={<Signup />} /> */}
-        {/* <Route path="/login" element={<Login />} /> */}
-
-      </Routes>
+       <div className="app-container">
+          <Navbar />
+          <main className="app-content">
+            <Routes>
+              {/* ✅ 각 페이지 라우팅 */}
+              <Route path="/" element={<Home />} />
+              <Route path="/interview" element={<Interview />} />
+              {/* <Route path="/portfolio" element={<Portfolio />} /> */}
+              {/* <Route path="/mypage" element={<MyPage />} /> */}
+              {/* <Route path="/signup" element={<Signup />} /> */}
+              {/* <Route path="/login" element={<Login />} /> */}
+              
+            </Routes>
+            </main>
+            <Footer />
+        </div>
     </Router>
   );
 };

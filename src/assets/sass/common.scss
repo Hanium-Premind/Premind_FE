@@ -1,8 +1,8 @@
 *{
     font-family: 'Pretendard Variable';
-    max-width: 1920px;
-    margin: 0 auto;
-    max-height: 790px;;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 @font-face {
 	font-family: 'Pretendard Variable';
@@ -10,4 +10,15 @@
 	font-style: normal;
 	font-display: swap;
 	src: url('./variable/woff2/PretendardVariable.woff2') format('woff2-variations');
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;  
+
+}
+
+.footer {
+  position: static;    
 }
