@@ -1,5 +1,6 @@
 
 .interview-setup {
+
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -12,18 +13,20 @@
     color:#58626C;
     font-size: 1.5rem;
     text-align: center;
-    margin-top: 100px;
-    margin-bottom: 80px;
+    width: 100%;
+    margin: 100px auto 80px;
+    margin-bottom: 0;
   }
 
   .mode-cards {
+    margin: 100px auto 80px;
     width: 640px;
     height: 340px;
     flex-shrink: 0;
     display: flex;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 60px;
+    
 
     .mode-card {
       flex: 1;
@@ -96,16 +99,16 @@
   }
 
   .type-list {
+    margin: 100px auto 80px;
     align-items: left;
     width: 100%;
     max-width: 640px;
-    margin-top: 60px;
     background-color: #FBFBFB;
     font-family: 'Pretendard Variable';
     color: #58626C;
     
 
-    .type-title {
+    .type-title { 
       font-size: 1.5rem;
       margin-bottom: 8px;
     }
@@ -205,23 +208,21 @@
 
 /* ─── 면접관 유형 섹션 ─── */
 .interviewer-section {
-  width: 100%;
+  max-width: 640px;
+  margin: 100px auto 80px;
   background-color: #FBFBFB;
   padding: 60px 20px;
   font-family: 'Pretendard Variable';
 
   .section-title {
-     max-width: 640px;
     font-size: 1.5rem;
     font-weight: 600;
     color: #58626C;
-    margin-bottom: 8px;
   }
   .section-sub {
     font-size: 0.95rem;
     color: #58626C;
     max-width: 640px;
-    margin-bottom: 40px;
   }
 
   .interviewer-cards {
@@ -233,6 +234,7 @@
     margin: 0 auto;
 
     .interviewer-card {
+      margin-top: 10%;
       flex: 1;
       padding: 24px;
       display: flex;
@@ -276,12 +278,16 @@
         border-radius: 20px;
         font-size: 1rem;
         cursor: pointer;
-      }
+      
 
-      &.active .select-btn {
-        background: #fff;
-        color: #379A6F;
-        border: 2px solid #379A6F;
+          &.active {
+          /* 카드가 활성화 됐을 때 (예: 그림자, 배경 등) */
+          
+            background-color: #fff;
+            color: #379A6F;
+            border: 2px solid #379A6F;
+          }
+        }
       }
     }
   }
@@ -303,11 +309,11 @@
   }
 
   .section-title {
+    margin: 100px auto 80px;
     font-size: 1.75rem;
     font-weight: 600;
     color: #58626C;
     margin-bottom: 16px;
-    text-align: left;
   }
 
   /* 드롭다운 박스 래퍼 */
@@ -402,13 +408,14 @@
   }
 }
 
-/* COMPLETE 버튼 스타일 (페이지 하단 우측)       */
 .complete-container {
+  background-color: #fff;
   width: 100%;
-  padding: 0 20px 40px;
+  margin: 80px auto 80px auto;
+  padding: 0 20px;
   display: flex;
   justify-content: flex-end;
-  align-items: center;
+
 
   .complete-btn {
     background: #379A6F;
@@ -424,5 +431,4 @@
       background: #218838;
     }
   }
-}
 }

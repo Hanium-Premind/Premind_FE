@@ -5,11 +5,11 @@ import Home from './pages/Home';
 import Interview from './pages/Interview/InterviewMain';
 import Footer from './components/Footer';
 import Login from './pages/signInUp/Login';
+import Signup from './pages/signInUp/SignUp';
 
 // import InterviewRecords from './pages/Interview/InterviewRecords';
 // import Portfolio from './pages/Portfolio';
 // import MyPage from './pages/MyPage';
-// import Signup from './pages/signInUp/SignUp';
 
 
 const App = () => {
@@ -23,9 +23,10 @@ const App = () => {
               <Route path="/" element={<Home />} />
               <Route path="/interview" element={<Interview />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
               {/* <Route path="/portfolio" element={<Portfolio />} /> */}
               {/* <Route path="/mypage" element={<MyPage />} /> */}
-              {/* <Route path="/signup" element={<Signup />} /> */}
+              
               
             </Routes>
             </main>

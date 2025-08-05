@@ -215,24 +215,19 @@ export default function InterviewSetup() {
         <p className="section-sub">
           이번 면접을 진행할 면접관을 선택해 주세요
         </p>
+
         <div className="interviewer-cards">
           {INTERVIEWERS.map(iv => (
-            <div
-              key={iv.id}
-              className={`interviewer-card ${
-                selectedInterviewer === iv.id ? 'active' : ''
-              }`}
-              onClick={() => setSelectedInterviewer(iv.id)}
-            >
+            <div key={iv.id} className="interviewer-card">
               <img src={iv.icon} alt={iv.title} className="iv-icon" />
-              <p>{iv.title}</p>
+              <p className="iv-title">{iv.title}</p>
               <p className="iv-desc1">{iv.desc1}</p>
               <p className="iv-desc2">{iv.desc2}</p>
+
+              {/* 버튼에만 onClick과 active 클래스를 줍니다 */}
               <button
-                className="select-btn"
-                onClick={e => {
-                  e.stopPropagation();
-                }}
+                className={`select-btn ${selectedInterviewer === iv.id ? 'active' : ''}`}
+                onClick={() => setSelectedInterviewer(iv.id)}
               >
                 선택
               </button>
@@ -240,6 +235,7 @@ export default function InterviewSetup() {
           ))}
         </div>
       </section>
+
 
       {/* 5. 자소서 & 포폴*/}
       <section className="paper-section">
@@ -293,10 +289,10 @@ export default function InterviewSetup() {
         </div>
       </section>
 
-      <div className="complete-container">
+      <section className="complete-container">
         <button className="complete-btn">면접 설정완료</button>
-      </div>
-    </div>
+      </section>
+  </div>
   );
 }
 

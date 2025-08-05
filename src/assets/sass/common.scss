@@ -18,7 +18,9 @@
   min-height: 100vh;  
 
 }
-
+.app-content {
+  flex: 1;
+}
 .footer {
   position: static;    
 }
