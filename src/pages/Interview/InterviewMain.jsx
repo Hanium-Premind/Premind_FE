@@ -185,27 +185,33 @@ export default function InterviewSetup() {
       {/* 3. 연습 모드일 때만: 질문 갯수 드롭다운 */}
       {selectedMode === 'practice' && (
         <section className="question-count-section">
-          <h2 className="section-title">면접 질문 갯수</h2>
+          <div className="qc-header">
+            <h2 className="section-title">면접 질문 갯수</h2>
+            <div className="count-control">
+              <select
+                className="count-select"
+                required
+                value={questionCount}
+                onChange={e => setQuestionCount(e.target.value)}
+              >
+                <option value="" disabled selected hidden>
+                기본 설정은 10개 입니다.
+                </option>
+                {[...Array(11)].map((_, i) => {
+                  const n = 5 + i;
+                  return (
+                    <option key={n} value={n}>
+                      {n}개
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+           </div>
           <p className="section-sub">
             이번 면접에서 진행할 질문의 갯수를 설정해 주세요.
-            설정 없으면 기본(10개)으로 진행됩니다.
+            <br />설정 없이 진행하면 기본설정으로 진행됩니다.
           </p>
-          <div className="count-control">
-            <select
-              className="count-select"
-              value={questionCount}
-              onChange={e => setQuestionCount(Number(e.target.value))}
-            >
-              {[...Array(11)].map((_, i) => {
-                const n = 5 + i;
-                return (
-                  <option key={n} value={n}>
-                    {n}개
-                  </option>
-                );
-              })}
-            </select>
-          </div>
         </section>
       )}
 
@@ -290,7 +296,9 @@ export default function InterviewSetup() {
       </section>
 
       <section className="complete-container">
-        <button className="complete-btn">면접 설정완료</button>
+        <button className="complete-btn" onClick={() => window.open('/interview/start', '_blank')}>
+          면접 설정완료
+        </button>
       </section>
   </div>
   );

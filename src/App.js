@@ -6,7 +6,7 @@ import Interview from './pages/Interview/InterviewMain';
 import Footer from './components/Footer';
 import Login from './pages/signInUp/Login';
 import Signup from './pages/signInUp/SignUp';
-
+import InterviewStart from './pages/Interview/InterviewStart';
 // import InterviewRecords from './pages/Interview/InterviewRecords';
 // import Portfolio from './pages/Portfolio';
 // import MyPage from './pages/MyPage';
@@ -22,6 +22,7 @@ const App = () => {
               {/* ✅ 각 페이지 라우팅 */}
               <Route path="/" element={<Home />} />
               <Route path="/interview" element={<Interview />} />
+              <Route path="/interview/start" element={<InterviewStart />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               {/* <Route path="/portfolio" element={<Portfolio />} /> */}
@@ -29,8 +30,8 @@ const App = () => {
               
               
             </Routes>
-            </main>
-            <Footer />
+          </main>
+          <Footer />
         </div>
     </Router>
   );

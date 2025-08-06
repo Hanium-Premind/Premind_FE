@@ -170,40 +170,59 @@
       }
     }
   }
+
+  /*면접개수 섹션*/
   .question-count-section {
-    max-width: 640px;
-    margin: 0 auto 40px;
-    text-align: left;
+    width: 100%;
+    max-width: 640px; /* 컨테이너 넓이 */
+    margin: 100px auto 80px;
+   
+  
+  .qc-header {
+    color: #58626C;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
 
-    .section-title {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: #333;
-      margin-bottom: 8px;
-    }
-    .section-sub {
-      font-size: 0.95rem;
-      color: #666;
-      margin-bottom: 16px;
-    }
+      .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #58626C;
+      }
 
-    .count-control {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
+      .section-sub {
+        font-size: 0.95rem;
+        color: #58626C;
+        margin-bottom: 16px;
 
-      .count-select {
-        padding: 8px 12px;
-        font-size: 1rem;
-        border: 1px solid #28a745;
-        border-radius: 6px;
-        appearance: none; 
-        background-size: 12px;
-        width: 120px;
-        cursor: pointer;
       }
     }
   }
+
+  .count-control {
+    select.count-select {
+        width: 200px;                   
+        padding: 8px 40px 8px 12px; // 오른쪽에 화살표 용 여유
+        font-size: 1rem;
+        border: 1px solid #28a745;
+        border-radius: 6px;
+        background: #fff;
+        cursor: pointer;
+        color: #333;
+        appearance: none; 
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        
+
+        background-image: url('../../assets/img/drop.png');
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 12px;
+      }
+  }
+
+
 
 
 /* ─── 면접관 유형 섹션 ─── */
@@ -411,10 +430,12 @@
 .complete-container {
   background-color: #fff;
   width: 100%;
-  margin: 80px auto 80px auto;
+  margin: 40px auto 0;
   padding: 0 20px;
   display: flex;
   justify-content: flex-end;
+  box-sizing: border-box;
+  margin-top: 0;
 
 
   .complete-btn {
@@ -426,6 +447,8 @@
     border-radius: 24px;
     cursor: pointer;
     transition: background 0.3s;
+    margin-bottom: 5%;
+    margin-right: 10%;
 
     &:hover {
       background: #218838;
