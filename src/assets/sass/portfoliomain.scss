@@ -1,0 +1,79 @@
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem 0;
+  }
+
+
+// 카드 스타일
+.card {
+  font-family: 'Pretendard Variable';
+  width: 780px;
+  height: 180px;
+  padding: 45px;
+  border-radius: 0.5rem;
+  margin-bottom: 10%;
+  background: #fff;
+  color: #1f2937; 
+  transition: all 0.3s;
+  border-radius: 12px;
+  box-shadow: 0 130px 37px 0 rgba(55, 154, 111, 0.00), 0 83px 33px 0 rgba(55, 154, 111, 0.01), 0 47px 28px 0 rgba(55, 154, 111, 0.05), 0 21px 21px 0 rgba(55, 154, 111, 0.09), 0 5px 11px 0 rgba(55, 154, 111, 0.10);
+
+  h2 {
+    font-size:20px;
+    font-weight: 600;
+    color: #58626C;
+  }
+
+  p {
+    color: #58626C;
+    font-size: 14px;
+    font-weight: normal;
+    margin-top: 0.5rem;
+  }
+
+  .button-wrap {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+
+    button {
+      padding:12px 32px;
+      border-radius: 24px;
+      font-weight: 600;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+    }
+  }
+
+  // 카드 선택 전 상태
+  &.default {
+    background: #fff;
+    color: #1f2937;
+
+    button {
+      background: #379A6F;
+      color: #fff;
+    }
+  }
+
+  // 카드 선택된 상태
+  &.selected {
+    background: #379A6F;
+    h2, p{
+        color: #fff;
+    }
+
+    button {
+      background: #fff;
+      color: #379A6F;
+
+      &:hover {
+        background: #f3f4f6;
+      }
+    }
+  }
+}
