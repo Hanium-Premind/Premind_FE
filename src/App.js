@@ -8,6 +8,8 @@ import Login from './pages/signInUp/Login';
 import Signup from './pages/signInUp/SignUp';
 import InterviewStart from './pages/Interview/InterviewStart';
 import PortfolioMain from './pages/portfolio/PortfolioMain';
+import Jaso from './pages/portfolio/Jaso';
+import JasoWrite from './pages/portfolio/JasoWrite';
 // import InterviewRecords from './pages/Interview/InterviewRecords';
 // import Portfolio from './pages/Portfolio';
 // import MyPage from './pages/MyPage';
@@ -27,6 +29,9 @@ const App = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/portfoliomain" element={<PortfolioMain />} />
+              <Route path="/jaso" element={<Jaso />} />
+              <Route path="/jasowrite" element={<JasoWrite />} />
+              
               {/* <Route path="/portfolio" element={<Portfolio />} /> */}
               {/* <Route path="/mypage" element={<MyPage />} /> */}
               
