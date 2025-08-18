@@ -1,71 +1,82 @@
-$background-color: #FBFBFB;
 .jaso-container {
-  width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin: 40px auto;
-  padding: 30px;
-  background: #fff;
-  border-radius: 12px;
+  max-width: 600px;
 
-
-  h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    text-align: center;
-    color: #333;
+  .jaso-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #495057;
+    margin-bottom: 40px;
   }
 
-  .input-box {
+  .jaso-section {
     width: 100%;
-    padding: 12px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 15px;
+    margin-bottom: 30px;
 
-    &:focus {
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #495057;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid #66a080;
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 15px;
+      font-size: 14px;
       outline: none;
-        border-radius: 8px;
-        border: 1px solid #379A6F;
+
+      &:focus {
+        border-color: #2f855a;
+        box-shadow: 0 0 4px rgba(47, 133, 90, 0.5);
+      }
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
     }
   }
 
-  .textarea-box {
-    width: 100%;
-    height: 160px;
-    padding: 12px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 15px;
-    resize: none;
+  .plus-button {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #495057;
+    color: #fff;
+    font-size: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0;
+    cursor: pointer;
+    transition: background 0.2s;
 
-    &:focus {
-        outline: none;
-        border-radius: 8px;
-        border: 1px solid #379A6F;
+    &:hover {
+      background: #343a40;
     }
   }
 
   .submit-btn {
-    width: 100%;
-    padding: 14px;
+    background: #2f9e44;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 32px;
     font-size: 16px;
     font-weight: 600;
-    color: #fff;
-    border: none;;
-    border-radius: 24px;
-    background: #379A6F;;
-
     cursor: pointer;
-    transition: all 0.25s ease;
+    transition: background 0.2s;
 
-    &:hover { 
-        border-radius: 24px;
-        background: #379A6F;
-    }
-
-    &:active {
-      transform: translateY(0px);
+    &:hover {
+      background: #238636;
     }
   }
 }

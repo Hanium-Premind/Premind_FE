@@ -1,66 +1,97 @@
 import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "../../assets/sass/jasowrite.scss";
 
 export default function JasoWrite() {
-  const { resumeId } = useParams(); // /resumes/:resumeId 에서 param 추출
   const navigate = useNavigate();
 
-  const [title, setTitle] = useState("");
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
+  const [formData, setFormData] = useState({
+    fileName: "",
+    job: "",
+    company: "",
+    question: "",
+    answer: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
   const handleSubmit = async () => {
     try {
-      const payload = {
-        title: title,
-        question: question,
-        answer: answer,
-      };
+      const response = await fetch("http://52.78.218.243:8080/resumes/upload", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-      await axios.post(`/resumes/${resumeId}`, payload);
-
-      alert("자기소개서가 저장되었습니다.");
-      navigate("/resumes/list"); // 작성 완료 후 리스트 페이지로 이동
+      if (response.ok) {
+        alert("자기소개서가 업로드되었습니다!");
+        navigate("/jaso"); // 작성완료 후 jaso.jsx 페이지로 이동
+      } else {
+        alert("업로드 실패, 다시 시도해주세요.");
+      }
     } catch (error) {
-      console.error(error);
-      alert("저장 중 오류가 발생했습니다.");
+      console.error("Error:", error);
+      alert("서버와 연결할 수 없습니다.");
     }
   };
 
   return (
     <div className="jaso-container">
-      <h2>자기소개서</h2>
+      <h1 className="jaso-title">자기소개서</h1>
 
-      {/* 파일명 입력 */}
-      <input
-        type="text"
-        placeholder="이번 자기소개서 파일명을 작성해주세요"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        className="input-box"
-      />
+      <div className="jaso-section">
+        <h3>[기본 항목]</h3>
+        <input
+          type="text"
+          name="fileName"
+          placeholder="이번 자기소개서 파일명을 작성해주세요"
+          value={formData.fileName}
+          onChange={handleChange}
+        />
+        <input
+          type="text"
+          name="job"
+          placeholder="이번 자기소개서를 작성할 직무를 선택해주세요"
+          value={formData.job}
+          onChange={handleChange}
+        />
+        <input
+          type="text"
+          name="company"
+          placeholder="이번에 준비할 기업의 이름을 작성해주세요"
+          value={formData.company}
+          onChange={handleChange}
+        />
+      </div>
 
-      {/* 질문 */}
-      <input
-        type="text"
-        placeholder="자기소개서 질문을 선택해주세요"
-        value={question}
-        onChange={(e) => setQuestion(e.target.value)}
-        className="input-box"
-      />
+      <div className="jaso-section">
+        <h3>[자기소개서 항목]</h3>
+        <input
+          type="text"
+          name="question"
+          placeholder="자기소개서 질문을 작성해주세요"
+          value={formData.question}
+          onChange={handleChange}
+        />
+        <textarea
+          name="answer"
+          placeholder="질문에 대한 내용을 작성해주세요."
+          value={formData.answer}
+          onChange={handleChange}
+        />
+      </div>
 
-      {/* 답변 */}
-      <textarea
-        placeholder="질문에 대한 내용을 작성해주세요."
-        value={answer}
-        onChange={(e) => setAnswer(e.target.value)}
-        className="textarea-box"
-      />
+      <div className="plus-button">+</div>
 
-      {/* 작성 완료 버튼 */}
-      <button onClick={handleSubmit} className="submit-btn">
+      <button className="submit-btn" onClick={handleSubmit}>
         작성 완료
       </button>
     </div>
