@@ -1,69 +1,72 @@
 import React, { useState, useEffect } from "react";
-import "../../assets/sass/interviewrun.scss";
+import '../../assets/sass/interviewrun.scss';
 
-const questions = [
-  "첫 번째 질문입니다. 답변해주세요.",
-  "두 번째 질문입니다. 답변해주세요.",
-  "세 번째 질문입니다. 답변해주세요.",
-  "네 번째 질문입니다. 답변해주세요.",
-  "다섯 번째 질문입니다. 답변해주세요."
-];
+const Interview = () => {
+  const [time, setTime] = useState(90); // 1:30 -> 90초
+  const [questionIndex, setQuestionIndex] = useState(0);
 
-const Quiz = () => {
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(90); // 1분 30초
-  const [isFinished, setIsFinished] = useState(false);
+  const questions = [
+    "면접에 앞서서, 본인에 대해 짧은 자기소개 부탁드립니다.",
+    "지원 동기와 이 직무를 선택한 이유는 무엇인가요?",
+    "본인의 장점과 단점에 대해 말씀해 주세요.",
+    "최근 성취한 경험 중 가장 보람찼던 순간은 무엇인가요?",
+    "향후 5년 후 본인의 커리어 계획은 무엇인가요?",
+  ];
 
-  // 타이머
   useEffect(() => {
-    if (timeLeft > 0 && !isFinished) {
-      const timer = setInterval(() => {
-        setTimeLeft((prev) => prev - 1);
-      }, 1000);
-      return () => clearInterval(timer);
-    } else if (timeLeft === 0) {
-      handleNextQuestion();
+    if (time > 0) {
+      const timer = setTimeout(() => setTime(time - 1), 1000);
+      return () => clearTimeout(timer);
     }
-  }, [timeLeft, isFinished]);
+  }, [time]);
 
-  // 다음 질문으로 이동
-  const handleNextQuestion = () => {
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion((prev) => prev + 1);
-      setTimeLeft(90);
-    } else {
-      setIsFinished(true);
+  const handleNext = () => {
+    if (questionIndex < questions.length - 1) {
+      setQuestionIndex(questionIndex + 1);
+      setTime(90);
     }
   };
 
+  const formatTime = (sec) => {
+    const m = String(Math.floor(sec / 60)).padStart(1, "0");
+    const s = String(sec % 60).padStart(2, "0");
+    return `${m}:${s}`;
+  };
+
   return (
-    <div className="quiz-container">
-      {!isFinished ? (
-        <>
-          <div className="quiz-question">
-            <h2>질문 {currentQuestion + 1}</h2>
-            <p>{questions[currentQuestion]}</p>
+    <div className="interview-container">
+      {/* 상단: 질문 */}
+      <div className="question-section">
+        <div className="question-header">
+          <div className="question-number">
+            {String(questionIndex + 1).padStart(2, "0")}.
           </div>
+          <div className="question-text">{questions[questionIndex]}</div>
+        </div>
+        <button className="subtitle-btn">자막 ON</button>
+      </div>
 
-          <div className="quiz-timer">
-            남은 시간: {Math.floor(timeLeft / 60)}:
-            {String(timeLeft % 60).padStart(2, "0")}
-          </div>
+      {/* 중앙: 타이머 & 안내 */}
+      <div className="answer-section">
+        <div className="timer">{formatTime(time)}</div>
+        <div className="answer-text">질문에 대한 답변 중</div>
+        <div className="answer-info">
+          실수로 넘어가지 않도록, 15초 이후에 답변을 마무리할 수 있도록 설정되어있습니다.
+          <br />
+          더이상 답변을 하고 싶지 않다면 답변을 마무리해주세요.
+        </div>
+      </div>
 
-          {/* 15초 이하일 때 버튼 표시 */}
-          {timeLeft <= 15 && (
-            <button className="quiz-button" onClick={handleNextQuestion}>
-              답변 마무리하기
-            </button>
-          )}
-        </>
-      ) : (
-        <div className="quiz-finish">
-          <h2>퀴즈가 종료되었습니다 🎉</h2>
+      {/* 하단: 버튼 */}
+      {(time <= 15 || time === 0) && (
+        <div className="button-section">
+          <button className="finish-btn" onClick={handleNext}>
+            답변 마무리 하기
+          </button>
         </div>
       )}
     </div>
   );
 };
 
-export default Quiz;
+export default Interview;

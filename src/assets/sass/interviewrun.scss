@@ -1,53 +1,87 @@
-.quiz-container {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 25px;
-  border-radius: 15px;
-  background: #f9f9f9;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-family: "Arial", sans-serif;
-
-  h2 {
-    margin-bottom: 10px;
-    font-size: 22px;
-    color: #333;
-  }
-
-  p {
-    font-size: 18px;
-    color: #555;
-  }
+.interview-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  padding: 40px;
+  box-sizing: border-box;
+  background: #fff;
 }
 
-.quiz-question {
-  margin-bottom: 20px;
-}
-
-.quiz-timer {
+.question-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 20px;
-  color: #0077ff;
-}
 
-.quiz-button {
-  padding: 12px 20px;
-  background: #0077ff;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: 0.3s ease;
+  .question-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 
-  &:hover {
-    background: #005ec2;
+    .question-number {
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .question-text {
+      color: #333;
+    }
+  }
+
+  .subtitle-btn {
+    border: 1px solid #4caf50;
+    border-radius: 20px;
+    padding: 6px 16px;
+    color: #4caf50;
+    background: none;
+    font-size: 14px;
+    cursor: pointer;
   }
 }
 
-.quiz-finish {
-  font-size: 20px;
-  font-weight: bold;
-  color: #444;
+.answer-section {
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .timer {
+    font-size: 48px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .answer-text {
+    font-size: 22px;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+
+  .answer-info {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.5;
+  }
+}
+
+.button-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+
+  .finish-btn {
+    background: #3f51b5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 16px;
+    cursor: pointer;
+
+    &:hover {
+      background: #2c3e9d;
+    }
+  }
 }
