@@ -1,98 +1,115 @@
 .resume-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 30px;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+
 
   .title {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 600;
-    margin-bottom: 20px;
-    color: #374151;
+    text-align: center;
+    color: hsl(215, 14%, 34%); // gray-700
+    margin-bottom: 30px;
   }
 
   .resume-box {
-    width: 700px;
-    border: 2px solid #3b82f6; // 파란색 테두리
-    border-radius: 6px;
+    width: 800px;
     background: #fff;
+    border-radius: 8px;
     overflow: hidden;
+    border: 1px solid #f1f1f1;
+  }
 
-    .resume-header {
+  .resume-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    background: #fafafa;
+    border-bottom: 1px solid #f1f1f1;
+    color: #555;
+
+    .col-left {
+      flex: 1;
+      text-align: left;
+    }
+    .col-right {
+      width: 120px;
+      text-align: right;
+    }
+  }
+
+  .resume-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    .resume-item {
       display: flex;
       justify-content: space-between;
-      background: #f9fafb;
-      padding: 12px 16px;
-      font-weight: 500;
-      border-bottom: 1px solid #e5e7eb;
+      align-items: center;
+      padding: 14px 20px;
+      border-bottom: 1px solid #f6f6f6;
+      transition: background 0.2s;
 
-      .left {
-        font-size: 14px;
+      &:hover {
+        background: #fafafa;
       }
-      .right {
-        font-size: 14px;
+
+      .resume-info {
+        flex: 1;
+        text-align: left;
+
+        .resume-title {
+          font-size: 16px;
+          font-weight: 500;
+          margin: 0 0 2px;
+          color: #333;
+        }
+
+        .resume-tags {
+          font-size: 13px;
+          color: #999;
+          margin: 0;
+        }
       }
-    }
 
-    .resume-list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-
-      .resume-item {
+      .resume-meta {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        padding: 14px 16px;
-        border-bottom: 1px solid #f0f0f0;
+        gap: 10px;
 
-        &:hover {
-          background: #f9fafc;
-        }
-
-        .resume-info {
-          h3 {
-            font-size: 16px;
-            font-weight: 500;
-            margin: 0 0 4px 0;
-          }
-          p {
-            font-size: 13px;
-            color: #6b7280;
-            margin: 0;
-          }
-        }
-
-        .resume-meta {
-          display: flex;
-          align-items: center;
-          gap: 12px;
+        .resume-date {
           font-size: 14px;
-          color: #374151;
+          color: #555;
+        }
 
-          .more {
-            cursor: pointer;
-            font-size: 18px;
-          }
+        .more {
+          font-size: 18px;
+          cursor: pointer;
+          color: #888;
         }
       }
     }
   }
 
   .button-wrap {
-    margin-top: 20px;
+    margin-top: 30px;
+    text-align: right;
 
-    .new-resume-btn {
-      background: #10b981;
+    button {
+      padding: 10px 20px;
+      background: #379A6F; // green
       color: #fff;
-      padding: 10px 18px;
-      border-radius: 6px;
       border: none;
+      border-radius: 20px;
+      font-size: 14px;
       cursor: pointer;
-      font-size: 15px;
+      transition: background 0.2s;
 
       &:hover {
-        background: #059669;
+        background: #257a55;
       }
     }
   }
