@@ -1,11 +1,29 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { AiFillTwitterCircle } from "react-icons/ai";
 import { FaInstagramSquare, FaFacebook } from "react-icons/fa";
+import { useEffect, useState } from 'react';
 import logo from '../assets/img/logo.png';
 import '../assets/sass/navbar.scss';
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    setIsLoggedIn(!!token);
+  }, [location]); // 🔥 경로가 바뀔 때마다 실행됨
+
+  const handleAuthClick = () => {
+    if (isLoggedIn) {
+      localStorage.removeItem("accessToken");
+      setIsLoggedIn(false);
+      navigate("/");
+    } else {
+      navigate("/login");
+    }
+  };
 
   return (
     <nav className="navbar">
@@ -24,12 +42,9 @@ export default function Navbar() {
         <button
           type="button"
           className="navbar__logout"
-          onClick={() => {
-            /* 로그아웃 로직 */
-            navigate('/login');
-          }}
+          onClick={handleAuthClick}
         >
-          로그아웃
+          {isLoggedIn ? "로그아웃" : "로그인"}
         </button>
         <div className="navbar__actions__icons">
           <AiFillTwitterCircle onClick={() => window.open('https://twitter.com', '_blank')} />

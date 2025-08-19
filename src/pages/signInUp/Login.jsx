@@ -19,9 +19,9 @@ export default function Login() {
     setErrorMsg('');
 
     try {
-      const res = await axios.post(
-        '/auth/login',
-        { username, password },
+        const res = await axios.post(
+          'http://52.78.218.243:8080/auth/login',
+          { username, password },
         {
           // 만약 쿠키 기반 세션을 쓰고 싶으면 이 옵션을 추가:
           // withCredentials: true
