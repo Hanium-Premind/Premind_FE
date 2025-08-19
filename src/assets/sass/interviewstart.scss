@@ -1,7 +1,7 @@
 .interview-start-page {
 
   padding: 40px 20px 80px;
-  background: #fafafa;
+ 
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -64,10 +64,11 @@
   background: #379A6F;
 }
 .checks small {
+  margin-left:20px;
   display: block;
   font-size: 0.875rem;
   color: #999;
-  margin-top: 4px;
+  margin-top: 1px;
 }
 
 .start-btn {

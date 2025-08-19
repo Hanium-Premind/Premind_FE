@@ -1,6 +1,6 @@
 import '../../assets/sass/interview.scss';
 import { useState, useEffect} from 'react';
-//import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 import intIcon1 from '../../assets/img/intIcon1.png';
@@ -75,33 +75,30 @@ export default function InterviewSetup() {
   const [portfolios, setPortfolios] = useState([]);
   const [loadingResumes, setLoadingResumes] = useState(true);
   const [loadingPortfolios, setLoadingPortfolios] = useState(true);
+  const navigate = useNavigate();
 
   const handleSelectMode = (modeId) => {
     setSelectedMode(modeId);
     // TODO: 백엔드로 선택값 전송하는 로직 추가하기
   };
 
-  useEffect(() => {
-    // GET /resume/list
-    fetch('/resume/list', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+     useEffect(() => {
+
+    // ✅ Resume 불러오기
+    fetch('http://52.78.218.243:8080/interviews/resumes', {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
     })
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to fetch resumes');
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch resumes");
         return res.json();
       })
-      .then(data => {
-        setResumes(data);          // [{ id, title }, …]
+      .then((data) => {
+        console.log("✅ Resume API Response:", data);
+        setResumes(Array.isArray(data) ? data : data.list || []);
       })
-      .catch(err => {
-        console.error(err);
-      })
-      .finally(() => {
-        setLoadingResumes(false);
-      });
+      .catch((err) => console.error(err))
+      .finally(() => setLoadingResumes(false));
 
     // GET /portfolio/list
     fetch('/portfolio/list', {
@@ -124,7 +121,6 @@ export default function InterviewSetup() {
         setLoadingPortfolios(false);
       });
   }, []);
-
 
   return (
     <div className="interview-setup">
@@ -252,12 +248,12 @@ export default function InterviewSetup() {
           ) : (
             <details className="custom-dropdown">
               <summary className={resume ? 'selected' : ''}>
-                {resume || '이번 면접에 사용할 자기소개서를 선택해주세요'}
+                {resume?.title || '이번 면접에 사용할 자기소개서를 선택해주세요'}
                 <span className="arrow" />
               </summary>
               <ul>
                 {resumes.map(r => (
-                  <li key={r.id} onClick={() => setResume(r.title)}>
+                  <li key={r.id} onClick={() => setResume(r)}>
                     {r.title}
                   </li>
                 ))}
@@ -291,7 +287,7 @@ export default function InterviewSetup() {
           <p className="optional-note">
             포트폴리오는 없어도 면접 진행이 가능합니다.
           </p>
-          <button className="new-btn">새로 작성하기</button>
+          <button className="new-btn" onClick={() => navigate('/jasowrite')}>새로 작성하기</button>
         </div>
       </section>
 

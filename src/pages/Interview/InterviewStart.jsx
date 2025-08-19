@@ -1,28 +1,35 @@
 import '../../assets/sass/interviewstart.scss';
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useRef } from 'react';
 import placeholderImg from '../../assets/img/intready.png';
 
 export default function InterviewStart() {
   const [micAllowed, setMicAllowed] = useState(false);
   const [camAllowed, setCamAllowed] = useState(false);
   const [step, setStep] = useState(0); // 0: 준비중, 1: 시작가능
+  const [stream, setStream] = useState(null);
+  const videoRef = useRef(null);
 
   useEffect(() => {
-    // 1) 마이크 권한 요청
-    navigator.mediaDevices.getUserMedia({ audio: true })
-      .then(stream => {
+    let localStream;
+
+    // 마이크 + 카메라 권한 요청
+    navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+      .then(s => {
+        localStream = s;
         setMicAllowed(true);
-        stream.getTracks().forEach(t => t.stop());
-        // 2) 카메라 권한 요청
-        return navigator.mediaDevices.getUserMedia({ video: true });
-      })
-      .then(stream => {
         setCamAllowed(true);
-        stream.getTracks().forEach(t => t.stop());
+        setStream(s); // 스트림 저장
       })
       .catch(err => {
         console.warn('permission denied', err);
       });
+
+    // 컴포넌트 언마운트 시 스트림 해제
+    return () => {
+      if (localStream) {
+        localStream.getTracks().forEach(t => t.stop());
+      }
+    };
   }, []);
 
   // 권한 둘 다 허용되면 시작 버튼 보여주기
@@ -31,6 +38,13 @@ export default function InterviewStart() {
       setStep(1);
     }
   }, [micAllowed, camAllowed]);
+
+  // stream을 video 태그에 연결
+  useEffect(() => {
+    if (videoRef.current && stream) {
+      videoRef.current.srcObject = stream;
+    }
+  }, [stream]);
 
   const handleStart = () => {
     window.open('/interview/run', '_blank');
@@ -70,7 +84,12 @@ export default function InterviewStart() {
         </div>
 
         <div className="right">
-          <img src={placeholderImg} alt="면접 영상 프리뷰" />
+          {/* 카메라 프리뷰 */}
+          {stream ? (
+            <video ref={videoRef} autoPlay playsInline muted style={{ width: '100%', borderRadius: '8px' }} />
+          ) : (
+            <img src={placeholderImg} alt="면접 영상 프리뷰" />
+          )}
           {step === 0 && <div className="overlay-text">면접 준비중…</div>}
         </div>
       </div>
