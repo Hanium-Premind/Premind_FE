@@ -103,16 +103,15 @@ const handleMiddleClick = (middle) => {
   // 소분류 클릭 시 선택 완료
   const handleMinorClick = (minor) => {
     setSelectedMinor(minor);
-
-    // 부모에 선택값 전달
-  if (onSelect) {
-    onSelect(minor.name);
+ if (onSelect) {
+    onSelect({
+      majorId: selectedMajor.id,
+      middleId: selectedMiddle.id,
+      minorId: minor.id,
+      name: `${selectedMajor.name} > ${selectedMiddle.name} > ${minor.name}`
+    });
   }
-
-  // 모달 닫기
-  if (onClose) {
-    onClose();
-  }
+  if (onClose) onClose();
   };
 
   return (

@@ -75,43 +75,58 @@ export default function JasoWrite() {
     ]);
   };
 
-  // 제출
-  const handleSubmit = async () => {
-    const accessToken = localStorage.getItem("accessToken");
-
-    const payload = {
-      ...formData,
-      qaList: qaList,
-    };
-
-    try {
-      const response = await fetch("http://52.78.218.243:8080/resumes/upload", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-          "Authorization": `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
-        alert("자기소개서가 업로드되었습니다!");
-        navigate("/jaso");
-      } else {
-        alert("업로드 실패, 다시 시도해주세요.");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      alert("서버와 연결할 수 없습니다.");
-    }
-  };
-
-  // ✅ 직무 선택 후 콜백
-  const handleJobSelect = (jobName) => {
-    setFormData({ ...formData, job: jobName });
+  // ✅ JobSelec에서 선택된 직무 ID도 같이 받음
+const handleJobSelect = (selectedJob) => {
     setIsJobModalOpen(false); // 모달 닫기
+    setFormData({
+     ...formData,
+     job: selectedJob.name,              // 표시용 (텍스트)
+      jobMajorId: selectedJob.majorId,    // API 전송용
+      jobMiddleId: selectedJob.middleId,
+      jobMinorId: selectedJob.minorId,
+  });
+  setIsJobModalOpen(false);
+};
+
+// ✅ 제출
+const handleSubmit = async () => {
+  const accessToken = localStorage.getItem("accessToken");
+
+  const payload = {
+    jobMajorId: formData.jobMajorId,
+    jobMiddleId: formData.jobMiddleId,
+    jobMinorId: formData.jobMinorId,
+    title: formData.title,
+    memo: "",               // 필요 시 메모 추가
+    company: formData.company,
+    qaList: qaList.map((qa) => ({
+      question: qa.question,
+      answer: qa.answer,
+    })),
   };
+
+  try {
+    const response = await fetch("http://52.78.218.243:8080/resumes/upload", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Authorization": `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (response.ok) {
+      alert("자기소개서가 업로드되었습니다!");
+      navigate("/jaso");
+    } else {
+      alert("업로드 실패, 다시 시도해주세요.");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    alert("서버와 연결할 수 없습니다.");
+  }
+};
 
   return (
     <div className="jaso-container">
