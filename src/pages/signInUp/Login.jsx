@@ -28,11 +28,17 @@ export default function Login() {
         }
       );
 
+      console.log("응답", res.data.data);
       // 예: { token: 'JWT 토큰 문자열', user: { ... } }
-      const { token } = res.data;
+      const accessToken = res.data.data.accessToken;
+      const refreshToken = res.data.data.refreshToken;
+
+      console.log("accessToken", accessToken);
+      console.log("refreshToken", refreshToken);
 
       // 토큰을 localStorage 에 저장
-      localStorage.setItem('accessToken', token);
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
 
       // "아이디 기억하기" 기능: 
       // true 면 username만 저장해 두고, 아니면 지우기

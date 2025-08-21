@@ -7,19 +7,30 @@ export default function ResumeList() {
   const navigate = useNavigate();
 
   // ✅ 데이터 fetch
-  useEffect(() => {
-    fetch("http://52.78.218.243:8080/resumes/list", {
-      method: "GET",
+ useEffect(() => {
+  const accessToken = localStorage.getItem("accessToken");
+
+  fetch("http://52.78.218.243:8080/resumes/list", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json", // 서버에 JSON 요청 명시
+      "Accept": "application/json",       // JSON 응답 기대
+      "Authorization": `Bearer ${accessToken}`, // ✅ 문자열 제대로 처리
+    },
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error("네트워크 응답 오류: " + res.status);
+      }
+      return res.json();
     })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("네트워크 응답 오류: " + res.status);
-        }
-        return res.json();
-      })
-      .then((data) => setResumes(data))
-      .catch((err) => console.error("API 오류:", err));
-  }, []);
+    .then((data) => {
+      console.log("자소서 목록 data", data); // ✅ 여기서 출력
+      setResumes(data.data);
+    })
+    .catch((err) => console.error("API 오류:", err));
+}, []);
+
 
   return (
     <div className="resume-page">
