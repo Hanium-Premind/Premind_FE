@@ -1,5 +1,5 @@
 import '../../assets/sass/interview.scss';
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useRef} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -76,6 +76,7 @@ export default function InterviewSetup() {
   const [loadingResumes, setLoadingResumes] = useState(true);
   const [loadingPortfolios, setLoadingPortfolios] = useState(true);
   const navigate = useNavigate();
+  const resumeDropdownRef = useRef(null);
 
   const handleSelectMode = (modeId) => {
     setSelectedMode(modeId);
@@ -83,22 +84,29 @@ export default function InterviewSetup() {
   };
 
      useEffect(() => {
+      const accessToken = localStorage.getItem("accessToken");
 
     // ✅ Resume 불러오기
-    fetch('http://52.78.218.243:8080/interviews/resumes', {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch resumes");
-        return res.json();
-      })
-      .then((data) => {
-        console.log("✅ Resume API Response:", data);
-        setResumes(Array.isArray(data) ? data : data.list || []);
-      })
-      .catch((err) => console.error(err))
-      .finally(() => setLoadingResumes(false));
+    // Resume 불러오기
+fetch('http://52.78.218.243:8080/interviews/resumes', {
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json", 
+    "Accept": "application/json",     
+    "Authorization": `Bearer ${accessToken}`, 
+  },
+})
+  .then((res) => {
+    if (!res.ok) throw new Error("Failed to fetch resumes");
+    return res.json();
+  })
+  .then((data) => {
+    console.log("✅ Resume API Response:", data.data);
+    setResumes(data.data || []); // ✅ data.data가 배열
+  })
+  .catch((err) => console.error(err))
+  .finally(() => setLoadingResumes(false));
+
 
     // GET /portfolio/list
     fetch('/portfolio/list', {
@@ -246,21 +254,34 @@ export default function InterviewSetup() {
           {loadingResumes ? (
             <p>로딩 중...</p>
           ) : (
-            <details className="custom-dropdown">
-              <summary className={resume ? 'selected' : ''}>
-                {resume?.title || '이번 면접에 사용할 자기소개서를 선택해주세요'}
-                <span className="arrow" />
-              </summary>
-              <ul>
-                {resumes.map(r => (
-                  <li key={r.id} onClick={() => setResume(r)}>
-                    {r.title}
-                  </li>
-                ))}
-              </ul>
-            </details>
+            <details className="custom-dropdown" ref={resumeDropdownRef}>
+  <summary className={resume ? 'selected' : ''}>
+    {resume?.title || '이번 면접에 사용할 자기소개서를 선택해주세요'}
+    <span className="arrow" />
+  </summary>
+  <ul>
+    {resumes.map(r => (
+      <li
+        key={r.id}
+        onClick={() => {
+          setResume(r);
+          resumeDropdownRef.current.open = false; 
+        }}
+      >
+        {r.title}
+      </li>
+    ))}
+  </ul>
+</details>
+
+
           )}
-          <button className="new-btn">새로 작성하기</button>
+          <button
+      className="new-btn"
+      onClick={() => navigate("/jasowrite")} 
+    >
+      새로 작성하기
+    </button>
         </div>
       </section>
 
