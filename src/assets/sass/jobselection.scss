@@ -1,0 +1,107 @@
+.job-modal {
+  display: flex;
+  width: 800px;
+  height: 500px;
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+
+  // 왼쪽 대분류 컬럼
+  .job-column.major {
+    flex: 1;
+    background-color: #4f8a65; // 녹색 배경
+    color: #ffffff;
+    padding: 24px;
+    font-size: 18px;
+    font-weight: bold;
+
+    // ✅ 스크롤 추가
+    max-height: 500px;     // 모달 높이와 동일
+    overflow-y: auto;      // 세로 스크롤 가능
+    scrollbar-width: thin; // 파이어폭스용 얇은 스크롤
+    scrollbar-color: #c1c1c1 transparent;
+
+    .item {
+      padding: 16px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+
+      &.selected {
+        background-color: rgba(255, 255, 255, 0.3);
+      }
+    }
+  }
+
+  // 가운데 중분류 컬럼
+  .job-column.middle {
+    flex: 1;
+    padding: 24px;
+    border-left: 1px solid #dcdcdc;
+    border-right: 1px solid #dcdcdc;
+    font-size: 16px;
+    color: #4f8a65;
+
+    .item {
+      padding: 14px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+
+      &:hover {
+        background-color: #f0f7f3;
+      }
+
+      &.selected {
+        background-color: #e0efe7;
+        font-weight: bold;
+      }
+    }
+  }
+
+  // 오른쪽 소분류 컬럼
+  .job-column.minor {
+    flex: 1;
+    padding: 24px;
+    font-size: 16px;
+    color: #4f8a65;
+
+    .item {
+      padding: 14px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+
+      &:hover {
+        background-color: #f0f7f3;
+      }
+
+      &.selected {
+        background-color: #e0efe7;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+// 모달 배경 (dim 처리)
+.job-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}

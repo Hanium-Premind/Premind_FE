@@ -13,9 +13,9 @@ export default function ResumeList() {
   fetch("http://52.78.218.243:8080/resumes/list", {
     method: "GET",
     headers: {
-      "Content-Type": "application/json", // 서버에 JSON 요청 명시
-      "Accept": "application/json",       // JSON 응답 기대
-      "Authorization": `Bearer ${accessToken}`, // ✅ 문자열 제대로 처리
+      "Content-Type": "application/json", 
+      "Accept": "application/json",     
+      "Authorization": `Bearer ${accessToken}`, 
     },
   })
     .then((res) => {
