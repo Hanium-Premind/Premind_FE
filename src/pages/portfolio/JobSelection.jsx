@@ -116,6 +116,7 @@ const handleMiddleClick = (middle) => {
 
   return (
     <div className="job-modal">
+      <button className="close-btn" onClick={onClose}>×</button>
       <div className="job-column major">
         {majors.map((major) => (
           <div
