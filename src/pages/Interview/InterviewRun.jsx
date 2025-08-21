@@ -2,16 +2,42 @@ import React, { useState, useEffect } from "react";
 import '../../assets/sass/interviewrun.scss';
 
 const Interview = () => {
-  const [time, setTime] = useState(90); // 1:30 -> 90초
+  const [time, setTime] = useState(90); // 기본 90초
   const [questionIndex, setQuestionIndex] = useState(0);
 
-  const questions = [
-    "면접에 앞서서, 본인에 대해 짧은 자기소개 부탁드립니다.",
-    "지원 동기와 이 직무를 선택한 이유는 무엇인가요?",
-    "본인의 장점과 단점에 대해 말씀해 주세요.",
-    "최근 성취한 경험 중 가장 보람찼던 순간은 무엇인가요?",
-    "향후 5년 후 본인의 커리어 계획은 무엇인가요?",
-  ];
+  // API에서 불러온 질문 리스트 (초기 빈 배열)
+  const [questions, setQuestions] = useState([]);
+
+  // 인터뷰 메타 데이터
+  const [meta, setMeta] = useState({
+    interview_record_id: null,
+    job_id: null,
+    total_question_num: 0,
+  });
+
+  useEffect(() => {
+    const saved = sessionStorage.getItem("interviewData");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      console.log("세션스토리지 interviewData:", parsed);
+
+      // ✅ meta 저장
+      setMeta({
+        interview_record_id: parsed.interview_record_id,
+        job_id: parsed.job_id,
+        total_question_num: parsed.total_question_num,
+      });
+
+      // ✅ 첫 질문 저장
+      setQuestions([parsed.question]);
+
+      // interview_record_id, job_id는 다음 요청에도 필요 → 다시 sessionStorage에 저장
+      sessionStorage.setItem("interviewMeta", JSON.stringify({
+        interview_record_id: parsed.interview_record_id,
+        job_id: parsed.job_id,
+      }));
+    }
+  }, []);
 
   useEffect(() => {
     if (time > 0) {
@@ -21,9 +47,12 @@ const Interview = () => {
   }, [time]);
 
   const handleNext = () => {
-    if (questionIndex < questions.length - 1) {
+    // 나중에는 여기서 "다음 질문 요청 API" 호출 가능
+    if (questionIndex < meta.total_question_num - 1) {
       setQuestionIndex(questionIndex + 1);
       setTime(90);
+    } else {
+      alert("모든 질문이 끝났습니다!");
     }
   };
 
@@ -41,7 +70,9 @@ const Interview = () => {
           <div className="question-number">
             {String(questionIndex + 1).padStart(2, "0")}.
           </div>
-          <div className="question-text">{questions[questionIndex]}</div>
+          <div className="question-text">
+            {questions[questionIndex] || "질문 불러오는 중..."}
+          </div>
         </div>
         <button className="subtitle-btn">자막 ON</button>
       </div>

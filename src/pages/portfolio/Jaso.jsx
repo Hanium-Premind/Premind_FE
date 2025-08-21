@@ -40,7 +40,7 @@ export default function ResumeList() {
         {/* 테이블 헤더 */}
         <div className="resume-header">
           <span className="col-left">등록 일자 순 ⬇</span>
-          <span className="col-right">등록일</span>
+          <span className="col-right">등록일자</span>
         </div>
 
         {/* 리스트 출력 */}
@@ -60,7 +60,6 @@ export default function ResumeList() {
           ))}
         </ul>
       </div>
-
       {/* 버튼 */}
       <div className="button-wrap">
         <button onClick={() => navigate("/jasowrite")}>

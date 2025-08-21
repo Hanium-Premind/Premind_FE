@@ -17,6 +17,10 @@
     border-radius: 8px;
     overflow: hidden;
     border: 1px solid #f1f1f1;
+
+     span {
+      text-align: center;
+    }
   }
 
   .resume-header {
@@ -35,7 +39,7 @@
     }
     .col-right {
       width: 120px;
-      text-align: right;
+      text-align: center;
     }
   }
 

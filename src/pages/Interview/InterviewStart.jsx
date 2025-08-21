@@ -1,5 +1,6 @@
 import '../../assets/sass/interviewstart.scss';
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import placeholderImg from '../../assets/img/intready.png';
 
 export default function InterviewStart() {
@@ -8,6 +9,8 @@ export default function InterviewStart() {
   const [step, setStep] = useState(0); // 0: 준비중, 1: 시작가능
   const [stream, setStream] = useState(null);
   const videoRef = useRef(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     let localStream;
@@ -47,7 +50,7 @@ export default function InterviewStart() {
   }, [stream]);
 
   const handleStart = () => {
-    window.open('/interview/run', '_blank');
+    navigate("/interview/run");
   };
 
   return (

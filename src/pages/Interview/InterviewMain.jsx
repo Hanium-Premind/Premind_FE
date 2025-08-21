@@ -36,21 +36,21 @@ const MODES = [
 
 const INTERVIEWERS = [
   {
-    id: 'strict',
+    id: 'STRICT',
     title: '깐깐한',
     desc1: '집요하게 물어보는 면접관입니다.',
     desc2: '작은 것 하나도 놓치지 말고 준비하세요',
     icon: ivIcon
   },
   {
-    id: 'friendly',
+    id: 'KIND',
     title: '상냥한',
     desc1: '편안한 분위기 속 면접 봅니다.',
     desc2: '중요한 요점 위주로 준비하세요',
     icon: ivIcon
   },
   {
-    id: 'practical',
+    id: 'JOB_SPECIFIC',
     title: '실무집중',
     desc1: '실제 활동의 관계 및 경험에 집중!',
     desc2: '활동의 경험을 정리해서 준비하세요',
@@ -129,6 +129,51 @@ export default function InterviewSetup() {
         setLoadingPortfolios(false);
       });
   }, []);
+
+  // 면접 설정 완료 핸들러
+  const handleComplete = async () => {
+    console.log("면접 설정 완료");
+    const accessToken = localStorage.getItem("accessToken");
+    console.log("accessToken", accessToken);
+
+    const payload = {
+      resumeId: resume?.id || null,               // 선택한 자소서
+      portfolioId: portfolio?.id || null,         // 선택한 포트폴리오
+      interviewerStyle: selectedInterviewer?.toUpperCase() || null, // STRICT, FRIENDLY, PRACTICAL
+      numQuestions: String(questionCount),        // 문자열로 변환
+     // interviewTypes: selectedType ? [selectedType.toUpperCase()] : [] // 배열 형태
+      interviewTypes: [] // 배열 형태
+    };
+    console.log("면접 설정 payload", payload);
+    console.log("selectedMode", selectedMode);
+
+    try {
+    const res = await fetch(`http://52.78.218.243:8080/interviews/${selectedMode}/start`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${accessToken}`
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) throw new Error("면접 설정 실패");
+
+    const data = await res.json();
+    console.log("✅ 면접 시작 응답:", data);
+
+    // 응답을 sessionStorage에 저장
+    sessionStorage.setItem("interviewData", JSON.stringify(data.data));
+
+    // 새 탭 열기
+    window.open("/interview/start", "_blank");
+
+  } catch (err) {
+    console.error(err);
+    alert("면접 설정 중 오류가 발생했습니다.");
+  }
+  };
+
 
   return (
     <div className="interview-setup">
@@ -265,7 +310,7 @@ export default function InterviewSetup() {
                     key={r.id}
                     onClick={() => {
                       setResume(r);
-                      resumeDropdownRef.current.open = false;
+                      resumeDropdownRef.current.open = false; // ✅ 선택하면 닫힘
                     }}
                   >
                     {r.title}
@@ -276,12 +321,7 @@ export default function InterviewSetup() {
 
 
           )}
-          <button
-            className="new-btn"
-            onClick={() => navigate("/jasowrite")}
-          >
-            새로 작성하기
-          </button>
+          <button className="new-btn">새로 작성하기</button>
         </div>
       </section>
 
@@ -313,9 +353,16 @@ export default function InterviewSetup() {
       </section>
 
       <section className="complete-container">
-        <button className="complete-btn" onClick={() => window.open('/interview/start', '_blank')}>
+        <button
+          className="complete-btn"
+          onClick={() => {
+
+            handleComplete();
+          }}
+        >
           면접 설정완료
         </button>
+
       </section>
     </div>
   );
