@@ -49,10 +49,11 @@ export default function ResumeList() {
             <li key={index} className="resume-item">
               <div className="resume-info">
                 <h3 className="resume-title">{resume.title}</h3>
-                <p className="resume-tags">{resume.tags}</p>
+                <p className="resume-tags">#{resume.company}</p>
+                <p className="resume-tags">#{resume.jobName}</p>
               </div>
               <div className="resume-meta">
-                <span className="resume-date">{resume.date}</span>
+                <span className="resume-date">{resume.createdDate.split("T")[0]}</span>
                 <span className="more">⋯</span>
               </div>
             </li>

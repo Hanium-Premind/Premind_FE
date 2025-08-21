@@ -1,5 +1,5 @@
 import '../../assets/sass/interview.scss';
-import { useState, useEffect, useRef} from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -16,7 +16,7 @@ const MODES = [
     title: '연습 모드',
     desc1: '면접 부담 없이 편안하게 몇 번이든',
     desc2: '내가 원하는 대로!',
-    img: intIcon1,             
+    img: intIcon1,
   },
   {
     id: 'real',
@@ -59,9 +59,9 @@ const INTERVIEWERS = [
 ];
 
 const TYPES = [
-  { id: 'basic',       title: '기본 면접',      desc: '면접에서 기본적인 질문을 생성해 진행합니다.' },
-  { id: 'personality', title: '인성 면접',      desc: '회사에 맞는 인재상, 인성과 관련된 질문을 생성해 진행합니다.' },
-  { id: 'job',         title: '직무 면접',      desc: '직무에 따른 경험 관련 질문을 생성해 진행합니다.' },
+  { id: 'basic', title: '기본 면접', desc: '면접에서 기본적인 질문을 생성해 진행합니다.' },
+  { id: 'personality', title: '인성 면접', desc: '회사에 맞는 인재상, 인성과 관련된 질문을 생성해 진행합니다.' },
+  { id: 'job', title: '직무 면접', desc: '직무에 따른 경험 관련 질문을 생성해 진행합니다.' },
 ];
 
 export default function InterviewSetup() {
@@ -83,29 +83,29 @@ export default function InterviewSetup() {
     // TODO: 백엔드로 선택값 전송하는 로직 추가하기
   };
 
-     useEffect(() => {
-      const accessToken = localStorage.getItem("accessToken");
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
 
     // ✅ Resume 불러오기
     // Resume 불러오기
-fetch('http://52.78.218.243:8080/interviews/resumes', {
-  method: "GET",
-  headers: {
-    "Content-Type": "application/json", 
-    "Accept": "application/json",     
-    "Authorization": `Bearer ${accessToken}`, 
-  },
-})
-  .then((res) => {
-    if (!res.ok) throw new Error("Failed to fetch resumes");
-    return res.json();
-  })
-  .then((data) => {
-    console.log("✅ Resume API Response:", data.data);
-    setResumes(data.data || []); // ✅ data.data가 배열
-  })
-  .catch((err) => console.error(err))
-  .finally(() => setLoadingResumes(false));
+    fetch('http://52.78.218.243:8080/interviews/resumes', {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Authorization": `Bearer ${accessToken}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch resumes");
+        return res.json();
+      })
+      .then((data) => {
+        console.log("✅ Resume API Response:", data.data);
+        setResumes(data.data || []); // ✅ data.data가 배열
+      })
+      .catch((err) => console.error(err))
+      .finally(() => setLoadingResumes(false));
 
 
     // GET /portfolio/list
@@ -145,7 +145,7 @@ fetch('http://52.78.218.243:8080/interviews/resumes', {
               <h2>{mode.title}</h2>
             </div>
             <div className="card-body">
-              <p>{mode.desc1}</p><br/>
+              <p>{mode.desc1}</p><br />
               <p>{mode.desc2}</p>
               <img src={mode.img} alt={mode.title} />
             </div>
@@ -199,7 +199,7 @@ fetch('http://52.78.218.243:8080/interviews/resumes', {
                 onChange={e => setQuestionCount(e.target.value)}
               >
                 <option value="" disabled selected hidden>
-                기본 설정은 10개 입니다.
+                  기본 설정은 10개 입니다.
                 </option>
                 {[...Array(11)].map((_, i) => {
                   const n = 5 + i;
@@ -211,7 +211,7 @@ fetch('http://52.78.218.243:8080/interviews/resumes', {
                 })}
               </select>
             </div>
-           </div>
+          </div>
           <p className="section-sub">
             이번 면접에서 진행할 질문의 갯수를 설정해 주세요.
             <br />설정 없이 진행하면 기본설정으로 진행됩니다.
@@ -255,33 +255,33 @@ fetch('http://52.78.218.243:8080/interviews/resumes', {
             <p>로딩 중...</p>
           ) : (
             <details className="custom-dropdown" ref={resumeDropdownRef}>
-  <summary className={resume ? 'selected' : ''}>
-    {resume?.title || '이번 면접에 사용할 자기소개서를 선택해주세요'}
-    <span className="arrow" />
-  </summary>
-  <ul>
-    {resumes.map(r => (
-      <li
-        key={r.id}
-        onClick={() => {
-          setResume(r);
-          resumeDropdownRef.current.open = false; 
-        }}
-      >
-        {r.title}
-      </li>
-    ))}
-  </ul>
-</details>
+              <summary className={resume ? 'selected' : ''}>
+                {resume?.title || '이번 면접에 사용할 자기소개서를 선택해주세요'}
+                <span className="arrow" />
+              </summary>
+              <ul>
+                {resumes.map(r => (
+                  <li
+                    key={r.id}
+                    onClick={() => {
+                      setResume(r);
+                      resumeDropdownRef.current.open = false;
+                    }}
+                  >
+                    {r.title}
+                  </li>
+                ))}
+              </ul>
+            </details>
 
 
           )}
           <button
-      className="new-btn"
-      onClick={() => navigate("/jasowrite")} 
-    >
-      새로 작성하기
-    </button>
+            className="new-btn"
+            onClick={() => navigate("/jasowrite")}
+          >
+            새로 작성하기
+          </button>
         </div>
       </section>
 
@@ -317,7 +317,7 @@ fetch('http://52.78.218.243:8080/interviews/resumes', {
           면접 설정완료
         </button>
       </section>
-  </div>
+    </div>
   );
 }
 

@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../assets/sass/jasowrite.scss";
-import JobSelec from "./JobSelection"; // ✅ 모달 컴포넌트 import
+import JobSelec from "./JobSelection";
 
 export default function JasoWrite() {
   const navigate = useNavigate();
   const [isJobModalOpen, setIsJobModalOpen] = useState(false);
 
-  // 드롭다운 질문 옵션
+  // 질문 옵션
   const questionOptions = [
     "본인의 성장과정에 대해 설명하세요",
     "지원 동기를 작성하세요",
@@ -22,7 +22,7 @@ export default function JasoWrite() {
     "자신의 가치관 또는 신념에 대해 설명하세요",
     "타인과의 갈등을 해결한 경험을 설명하세요",
     "해당 기업에 지원한 이유와 기업에 대해 조사한 내용을 포함해 설명하세요",
-    "직접 작성"
+    "직접 작성",
   ];
 
   // 기본 정보
@@ -34,19 +34,17 @@ export default function JasoWrite() {
 
   // 질문/답변 리스트
   const [qaList, setQaList] = useState([
-    { question: questionOptions[0], answer: "", isCustom: false }
+    { question: questionOptions[0], answer: "", isCustom: false },
   ]);
 
-  // 기본 항목 핸들러
+  const dropdownRefs = useRef([]);
+
+  // 핸들러
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value });
   };
 
-  // 질문/답변 핸들러
   const handleQaChange = (index, e) => {
     const { name, value } = e.target;
     const newQaList = [...qaList];
@@ -54,7 +52,6 @@ export default function JasoWrite() {
     setQaList(newQaList);
   };
 
-  // 드롭다운 변경 핸들러
   const handleDropdownChange = (index, value) => {
     const newQaList = [...qaList];
     if (value === "직접 작성") {
@@ -67,66 +64,61 @@ export default function JasoWrite() {
     setQaList(newQaList);
   };
 
-  // 질문/답변 추가
   const addQa = () => {
     setQaList([
       ...qaList,
-      { question: questionOptions[0], answer: "", isCustom: false }
+      { question: questionOptions[0], answer: "", isCustom: false },
     ]);
   };
 
-  // ✅ JobSelec에서 선택된 직무 ID도 같이 받음
-const handleJobSelect = (selectedJob) => {
-    setIsJobModalOpen(false); // 모달 닫기
+  const handleJobSelect = (selectedJob) => {
+    setIsJobModalOpen(false);
     setFormData({
-     ...formData,
-     job: selectedJob.name,              // 표시용 (텍스트)
-      jobMajorId: selectedJob.majorId,    // API 전송용
+      ...formData,
+      job: selectedJob.name,
+      jobMajorId: selectedJob.majorId,
       jobMiddleId: selectedJob.middleId,
       jobMinorId: selectedJob.minorId,
-  });
-  setIsJobModalOpen(false);
-};
-
-// ✅ 제출
-const handleSubmit = async () => {
-  const accessToken = localStorage.getItem("accessToken");
-
-  const payload = {
-    jobMajorId: formData.jobMajorId,
-    jobMiddleId: formData.jobMiddleId,
-    jobMinorId: formData.jobMinorId,
-    title: formData.title,
-    memo: "",               // 필요 시 메모 추가
-    company: formData.company,
-    qaList: qaList.map((qa) => ({
-      question: qa.question,
-      answer: qa.answer,
-    })),
+    });
   };
 
-  try {
-    const response = await fetch("http://52.78.218.243:8080/resumes/upload", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "Authorization": `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify(payload),
-    });
+  const handleSubmit = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+    const payload = {
+      jobMajorId: formData.jobMajorId,
+      jobMiddleId: formData.jobMiddleId,
+      jobMinorId: formData.jobMinorId,
+      title: formData.title,
+      memo: "",
+      company: formData.company,
+      qaList: qaList.map((qa) => ({
+        question: qa.question,
+        answer: qa.answer,
+      })),
+    };
 
-    if (response.ok) {
-      alert("자기소개서가 업로드되었습니다!");
-      navigate("/jaso");
-    } else {
-      alert("업로드 실패, 다시 시도해주세요.");
+    try {
+      const response = await fetch("http://52.78.218.243:8080/resumes/upload", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        alert("자기소개서가 업로드되었습니다!");
+        navigate("/jaso");
+      } else {
+        alert("업로드 실패, 다시 시도해주세요.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("서버와 연결할 수 없습니다.");
     }
-  } catch (error) {
-    console.error("Error:", error);
-    alert("서버와 연결할 수 없습니다.");
-  }
-};
+  };
 
   return (
     <div className="jaso-container">
@@ -164,16 +156,28 @@ const handleSubmit = async () => {
         {qaList.map((qa, index) => (
           <div key={index} className="qa-block">
             {!qa.isCustom && (
-              <select
-                value={qa.question}
-                onChange={(e) => handleDropdownChange(index, e.target.value)}
+              <details
+                className="custom-dropdown"
+                ref={(el) => (dropdownRefs.current[index] = el)}
               >
-                {questionOptions.map((option, i) => (
-                  <option key={i} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
+                <summary className={qa.question ? "selected" : ""}>
+                  {qa.question || "자기소개서 질문을 선택해주세요"}
+                  <span className="arrow" />
+                </summary>
+                <ul>
+                  {questionOptions.map((option, i) => (
+                    <li
+                      key={i}
+                      onClick={() => {
+                        handleDropdownChange(index, option);
+                        dropdownRefs.current[index].open = false; // ✅ 선택 후 닫힘
+                      }}
+                    >
+                      {option}
+                    </li>
+                  ))}
+                </ul>
+              </details>
             )}
 
             {qa.isCustom && (
@@ -198,7 +202,9 @@ const handleSubmit = async () => {
           </div>
         ))}
 
-        <div className="plus-button" onClick={addQa}>+</div>
+        <div className="plus-button" onClick={addQa}>
+          +
+        </div>
       </div>
 
       <button className="submit-btn" onClick={handleSubmit}>
@@ -207,7 +213,10 @@ const handleSubmit = async () => {
 
       {isJobModalOpen && (
         <div className="job-backdrop">
-          <JobSelec onSelect={handleJobSelect} onClose={() => setIsJobModalOpen(false)} />
+          <JobSelec
+            onSelect={handleJobSelect}
+            onClose={() => setIsJobModalOpen(false)}
+          />
         </div>
       )}
     </div>

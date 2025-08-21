@@ -3,12 +3,11 @@
   margin: 0 auto;
   padding: 40px 20px;
 
-
   .title {
     font-size: 24px;
     font-weight: 600;
     text-align: center;
-    color: hsl(215, 14%, 34%); // gray-700
+    color: hsl(215, 14%, 34%);
     margin-bottom: 30px;
   }
 
@@ -64,14 +63,16 @@
         .resume-title {
           font-size: 16px;
           font-weight: 500;
-          margin: 0 0 2px;
+          margin: 0 0 6px; // 아래쪽 간격 약간 띄움
           color: #333;
         }
 
+        /* ✅ 태그들을 가로 정렬 */
         .resume-tags {
+          display: inline-block;
           font-size: 13px;
-          color: #999;
-          margin: 0;
+          color: #666;
+          margin-right: 8px; // 태그 사이 여백
         }
       }
 
@@ -100,7 +101,7 @@
 
     button {
       padding: 10px 20px;
-      background: #379A6F; // green
+      background: #379A6F;
       color: #fff;
       border: none;
       border-radius: 20px;
