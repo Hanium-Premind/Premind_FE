@@ -77,6 +77,8 @@ export default function InterviewSetup() {
   const [loadingPortfolios, setLoadingPortfolios] = useState(true);
   const navigate = useNavigate();
   const resumeDropdownRef = useRef(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
 
   const handleSelectMode = (modeId) => {
     setSelectedMode(modeId);
@@ -130,50 +132,47 @@ export default function InterviewSetup() {
       });
   }, []);
 
-  // 면접 설정 완료 핸들러
+ // 면접 설정 완료 핸들러
   const handleComplete = async () => {
-    console.log("면접 설정 완료");
+    setIsSubmitting(true); // ✅ 로딩 시작
     const accessToken = localStorage.getItem("accessToken");
-    console.log("accessToken", accessToken);
 
     const payload = {
-      resumeId: resume?.id || null,               // 선택한 자소서
-      portfolioId: portfolio?.id || null,         // 선택한 포트폴리오
-      interviewerStyle: selectedInterviewer?.toUpperCase() || null, // STRICT, FRIENDLY, PRACTICAL
-      numQuestions: String(questionCount),        // 문자열로 변환
-     // interviewTypes: selectedType ? [selectedType.toUpperCase()] : [] // 배열 형태
-      interviewTypes: [] // 배열 형태
+      resumeId: resume?.id || null,
+      portfolioId: portfolio?.id || null,
+      interviewerStyle: selectedInterviewer?.toUpperCase() || null,
+      numQuestions: String(questionCount),
+      interviewTypes: []
     };
-    console.log("면접 설정 payload", payload);
-    console.log("selectedMode", selectedMode);
 
     try {
-    const res = await fetch(`http://52.78.218.243:8080/interviews/${selectedMode}/start`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${accessToken}`
-      },
-      body: JSON.stringify(payload)
-    });
+      const res = await fetch(
+        `http://52.78.218.243:8080/interviews/${selectedMode}/start`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`
+          },
+          body: JSON.stringify(payload)
+        }
+      );
 
-    if (!res.ok) throw new Error("면접 설정 실패");
+      if (!res.ok) throw new Error("면접 설정 실패");
 
-    const data = await res.json();
-    console.log("✅ 면접 시작 응답:", data);
+      const data = await res.json();
+      console.log("✅ 면접 시작 응답:", data);
 
-    // 응답을 sessionStorage에 저장
-    sessionStorage.setItem("interviewData", JSON.stringify(data.data));
+      sessionStorage.setItem("interviewData", JSON.stringify(data.data));
+      window.open("/interview/start", "_blank");
 
-    // 새 탭 열기
-    window.open("/interview/start", "_blank");
-
-  } catch (err) {
-    console.error(err);
-    alert("면접 설정 중 오류가 발생했습니다.");
-  }
+    } catch (err) {
+      console.error(err);
+      alert("면접 설정 중 오류가 발생했습니다.");
+    } finally {
+      setIsSubmitting(false); // ✅ 로딩 종료
+    }
   };
-
 
   return (
     <div className="interview-setup">
@@ -360,7 +359,7 @@ export default function InterviewSetup() {
             handleComplete();
           }}
         >
-          면접 설정완료
+          {isSubmitting ? "로딩중..." : "면접 설정완료"}
         </button>
 
       </section>
