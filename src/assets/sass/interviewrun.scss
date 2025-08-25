@@ -30,6 +30,7 @@
   }
 
   .subtitle-btn {
+    margin-top: 20%;
     border: 1px solid #4caf50;
     border-radius: 20px;
     padding: 6px 16px;
@@ -37,6 +38,11 @@
     background: none;
     font-size: 14px;
     cursor: pointer;
+
+        &:hover {
+         background: #4caf50;
+         color:white;
+        }
   }
 }
 
@@ -72,16 +78,47 @@
   margin-top: 20px;
 
   .finish-btn {
-    background: #3f51b5;
+    background: #58626C;
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 22px;
     padding: 12px 24px;
     font-size: 16px;
     cursor: pointer;
 
     &:hover {
       background: #2c3e9d;
+    }
+  }
+}
+
+.report-section {
+  text-align: center;
+  padding: 20px;
+
+  h2 {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+
+  p {
+    margin: 8px 0;
+    font-size: 16px;
+    color: #444;
+  }
+
+  .next-btn {
+    margin-top: 20px;
+    padding: 12px 28px;
+    font-size: 16px;
+    background: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+
+    &:hover {
+      background: #3e8e41;
     }
   }
 }

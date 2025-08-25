@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import "../../assets/sass/jobselection.scss";
 
 export default function JobSelec({onSelect, onClose}) {
-  const navigate = useNavigate();
+
 
   const [majors, setMajors] = useState([]);   // 대분류
   const [middles, setMiddles] = useState([]); // 중분류
