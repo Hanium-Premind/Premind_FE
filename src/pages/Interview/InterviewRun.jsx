@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../../assets/sass/interviewrun.scss";
@@ -10,7 +10,8 @@ const InterviewRun = () => {
   const [answerTime, setAnswerTime] = useState(0);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [questions, setQuestions] = useState([]);
-  const [report, setReport] = useState(null);
+  const [report, setReport] = useState(null);        // 개별 질문 피드백
+  const [finalReport, setFinalReport] = useState(null); // 최종 리포트
   const [isFinished, setIsFinished] = useState(false);
   const [subtitleOn, setSubtitleOn] = useState(true);
 
@@ -20,9 +21,9 @@ const InterviewRun = () => {
     total_question_num: 0,
   });
 
-  // MediaRecorder 관련 상태
-  const mediaRecorderRef = useRef(null);
-  const chunksRef = useRef([]);
+  const [stream, setStream] = useState(null);
+  const [mediaRecorder, setMediaRecorder] = useState(null);
+  const [chunks, setChunks] = useState([]);
 
   // ✅ 세션에서 첫 질문 불러오기
   useEffect(() => {
@@ -41,33 +42,33 @@ const InterviewRun = () => {
     }
   }, []);
 
-  // ✅ 카메라/마이크 녹화 시작
+  // ✅ 카메라/마이크 시작 + 녹화
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-      .then(stream => {
-        const recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
-        recorder.ondataavailable = (e) => {
-          if (e.data && e.data.size > 0) {
-            chunksRef.current.push(e.data);
-          }
-        };
-        recorder.start(1000);
-        mediaRecorderRef.current = recorder;
-        console.log("🎥 MediaRecorder 시작됨");
-      })
-      .catch(err => {
-        console.error("❌ MediaRecorder 초기화 실패:", err);
+      .then((s) => {
+        setStream(s);
+
+      // 🔥 코덱 지정
+      const recorder = new MediaRecorder(s, {
+        mimeType: "video/webm;codecs=vp8,opus",
       });
 
+        recorder.ondataavailable = (e) => {
+          if (e.data.size > 0) setChunks((prev) => [...prev, e.data]);
+        };
+
+        setMediaRecorder(recorder);
+        recorder.start(1000);
+        console.log("▶️ MediaRecorder 시작됨");
+      })
+      .catch((err) => console.error("❌ 카메라/마이크 접근 실패:", err));
+
     return () => {
-      if (mediaRecorderRef.current) {
-        mediaRecorderRef.current.stream.getTracks().forEach(t => t.stop());
-        mediaRecorderRef.current = null;
-      }
+      if (stream) stream.getTracks().forEach((t) => t.stop());
     };
   }, []);
 
-  // ✅ 타이머 동작
+  // ✅ 타이머
   useEffect(() => {
     if (time > 0 && !report && !isFinished) {
       const timer = setTimeout(() => {
@@ -84,7 +85,7 @@ const InterviewRun = () => {
     return `${m}:${s}`;
   };
 
-  // ✅ 답변 제출 (form-data, 실제 영상 Blob 포함)
+  // ✅ 답변 제출
   const handleSubmitAnswer = async () => {
     console.log("🟢 handleSubmitAnswer 실행됨");
 
@@ -93,33 +94,35 @@ const InterviewRun = () => {
       return;
     }
 
-    // 녹화 중단
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
-      mediaRecorderRef.current.stop();
+    if (mediaRecorder && mediaRecorder.state !== "inactive") {
+      mediaRecorder.stop();
     }
 
-    const recordedBlob = new Blob(chunksRef.current, { type: "video/webm" });
-    console.log("🎞️ 녹화된 Blob 크기:", recordedBlob.size);
+    const recordedBlob = new Blob(chunks, { type: "video/webm" });
+    console.log("🎥 Blob 크기:", recordedBlob.size);
+
+    if (recordedBlob.size === 0) {
+      console.error("⚠️ Blob 비어있음 → 영상 없음");
+      return;
+    }
 
     try {
-      const usedTime = answerTime.toString();
+      const token = localStorage.getItem("accessToken");
 
       const formData = new FormData();
-      formData.append("job_id", meta.job_id);
-      formData.append("file", recordedBlob, "answer.webm"); // 🔥 실제 녹화 영상
-      formData.append("answer_time", usedTime);
+      formData.append("job_id", String(meta.job_id));       // Text
+      formData.append("file", recordedBlob, "answer.webm"); // File
+      formData.append("answer_time", String(answerTime));   // Text
 
-      console.log("📤 전송 FormData:");
-      for (let [key, value] of formData.entries()) {
-        console.log(`${key}:`, value);
-      }
+      console.log("📤 FormData:", [...formData.entries()]);
 
       const res = await axios.post(
         `http://52.78.218.243:8080/interviews/practice/submit/${meta.interview_record_id}`,
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data", // ✅ Authorization 제거
+            Authorization: `Bearer ${token}`,   // ✅ 토큰 포함
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -127,43 +130,54 @@ const InterviewRun = () => {
       console.log("✅ 서버 응답:", res.data);
       const result = res.data.data;
 
-      setReport({
-        short_feedback: result.short_feedback,
-      });
-
-      if (result.next_question) {
-        setQuestions((prev) => [...prev, result.next_question]);
-      }
-
       if (result.finished) {
+        // ✅ 마지막 질문 → 종합 리포트 표시
         setIsFinished(true);
+        setFinalReport(result.report);
+      } else {
+        // ✅ 개별 질문 피드백
+        setReport({ short_feedback: result.short_feedback });
+        if (result.next_question) {
+          setQuestions((prev) => [...prev, result.next_question]);
+        }
       }
     } catch (err) {
-      console.error("❌ 제출 실패:", err.response?.data || err.message);
+      console.error("❌ 제출 실패:", err.response?.status, err.response?.data || err.message);
     }
   };
 
-  // ✅ 리포트 확인 후 다음 질문으로 이동
+  // ✅ 다음 질문으로 이동
   const handleNextQuestion = () => {
     setReport(null);
     setAnswerTime(0);
+    setChunks([]);
     setQuestionIndex((prev) => prev + 1);
     setTime(90);
 
-    // 다음 질문 대비 chunks 초기화 + 다시 녹화 시작
-    chunksRef.current = [];
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state === "inactive") {
-      mediaRecorderRef.current.start(1000);
+    if (stream) {
+      const newRecorder = new MediaRecorder(stream, { mimeType: "video/webm" });
+      newRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) setChunks((prev) => [...prev, e.data]);
+      };
+      setMediaRecorder(newRecorder);
+      newRecorder.start(1000);
     }
   };
 
   return (
     <div className="interview-container">
-      {report ? (
+      {finalReport ? (
+        // ✅ 최종 리포트
+        <div className="final-report">
+          <h2>📊 최종 면접 리포트</h2>
+          <pre>{JSON.stringify(finalReport, null, 2)}</pre>
+        </div>
+      ) : report ? (
+        // ✅ 개별 리포트
         <div className="report-section">
           <h2>📊 질문 {questionIndex + 1} 리포트</h2>
-          <p>{report.short_feedback || "리포트가 생성되지 않았습니다."}</p>
-          <div className="answer-time">답변 진행시간: {answerTime}초</div>
+          <p>{report.short_feedback}</p>
+          <div className="answer-time">답변 시간: {answerTime}초</div>
           <button className="next-btn" onClick={handleNextQuestion}>
             {questionIndex < meta.total_question_num - 1
               ? "다음 면접 진행하기"
@@ -171,8 +185,8 @@ const InterviewRun = () => {
           </button>
         </div>
       ) : !isFinished ? (
+        // ✅ 질문 화면
         <>
-          {/* 질문 */}
           <div className="question-section">
             <div className="question-header">
               <div className="question-number">
@@ -192,11 +206,10 @@ const InterviewRun = () => {
             </button>
           </div>
 
-          {/* 답변 섹션 */}
           <div className="answer-section">
             <div className="timer">{formatTime(time)}</div>
             <div className="answer-info">
-              15초 이후 또는 시간이 끝나면 답변을 마무리할 수 있습니다.
+              15초 이후에 답변을 마무리할 수 있습니다.
             </div>
           </div>
 
@@ -209,13 +222,7 @@ const InterviewRun = () => {
           )}
         </>
       ) : (
-        <div className="report-section">
-          <h2>면접 종료</h2>
-          <p>최종 리포트가 생성되었습니다.</p>
-          <button onClick={() => navigate("/interviews/result")}>
-            면접 결과 보러가기
-          </button>
-        </div>
+        <div>면접이 종료되었습니다.</div>
       )}
     </div>
   );
