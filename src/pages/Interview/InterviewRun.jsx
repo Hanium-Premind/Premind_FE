@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../../assets/sass/interviewrun.scss";
@@ -7,12 +7,12 @@ const InterviewRun = () => {
   const navigate = useNavigate();
 
   const [time, setTime] = useState(15);
+  const [answerTime, setAnswerTime] = useState(0);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [questions, setQuestions] = useState([]);
   const [report, setReport] = useState(null);
   const [isFinished, setIsFinished] = useState(false);
   const [subtitleOn, setSubtitleOn] = useState(true);
-  const [answerTime, setAnswerTime] = useState(0);
 
   const [meta, setMeta] = useState({
     interview_record_id: null,
@@ -20,12 +20,16 @@ const InterviewRun = () => {
     total_question_num: 0,
   });
 
-  // ✅ 세션에서 첫 번째 질문 불러오기
+  // MediaRecorder 관련 상태
+  const mediaRecorderRef = useRef(null);
+  const chunksRef = useRef([]);
+
+  // ✅ 세션에서 첫 질문 불러오기
   useEffect(() => {
     const saved = sessionStorage.getItem("interviewData");
     if (saved) {
       const parsed = JSON.parse(saved);
-      console.log("✅ 세션스토리지 interviewData:", parsed);
+      console.log("✅ 세션 interviewData:", parsed);
 
       setMeta({
         interview_record_id: parsed.interview_record_id,
@@ -33,8 +37,34 @@ const InterviewRun = () => {
         total_question_num: parsed.total_question_num,
       });
 
-      setQuestions([parsed.question]); // 첫 질문 저장
+      setQuestions([parsed.question]);
     }
+  }, []);
+
+  // ✅ 카메라/마이크 녹화 시작
+  useEffect(() => {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+      .then(stream => {
+        const recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
+        recorder.ondataavailable = (e) => {
+          if (e.data && e.data.size > 0) {
+            chunksRef.current.push(e.data);
+          }
+        };
+        recorder.start(1000);
+        mediaRecorderRef.current = recorder;
+        console.log("🎥 MediaRecorder 시작됨");
+      })
+      .catch(err => {
+        console.error("❌ MediaRecorder 초기화 실패:", err);
+      });
+
+    return () => {
+      if (mediaRecorderRef.current) {
+        mediaRecorderRef.current.stream.getTracks().forEach(t => t.stop());
+        mediaRecorderRef.current = null;
+      }
+    };
   }, []);
 
   // ✅ 타이머 동작
@@ -54,30 +84,34 @@ const InterviewRun = () => {
     return `${m}:${s}`;
   };
 
-  // ✅ 답변 제출 (form-data + 토큰)
+  // ✅ 답변 제출 (form-data, 실제 영상 Blob 포함)
   const handleSubmitAnswer = async () => {
     console.log("🟢 handleSubmitAnswer 실행됨");
+
     if (!meta.interview_record_id || !meta.job_id) {
       console.error("⚠️ meta 정보 없음:", meta);
       return;
     }
 
+    // 녹화 중단
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
+      mediaRecorderRef.current.stop();
+    }
+
+    const recordedBlob = new Blob(chunksRef.current, { type: "video/webm" });
+    console.log("🎞️ 녹화된 Blob 크기:", recordedBlob.size);
+
     try {
-      const token = localStorage.getItem("accessToken");
-      console.log("📌 token:", token);
+      const usedTime = answerTime.toString();
 
       const formData = new FormData();
       formData.append("job_id", meta.job_id);
-      formData.append(
-        "file",
-        new Blob([], { type: "video/webm" }),
-        "answer.webm"
-      ); // 🔥 추후 녹화 데이터 교체
-      formData.append("answer_time", answerTime);
+      formData.append("file", recordedBlob, "answer.webm"); // 🔥 실제 녹화 영상
+      formData.append("answer_time", usedTime);
 
-      console.log("📤 FormData 내용:");
+      console.log("📤 전송 FormData:");
       for (let [key, value] of formData.entries()) {
-        console.log(key, value);
+        console.log(`${key}:`, value);
       }
 
       const res = await axios.post(
@@ -85,22 +119,18 @@ const InterviewRun = () => {
         formData,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "multipart/form-data", // ✅ Authorization 제거
           },
         }
       );
 
       console.log("✅ 서버 응답:", res.data);
-
       const result = res.data.data;
 
-      // 🔥 short_feedback 리포트에 표시
       setReport({
         short_feedback: result.short_feedback,
       });
 
-      // 🔥 다음 질문 저장
       if (result.next_question) {
         setQuestions((prev) => [...prev, result.next_question]);
       }
@@ -115,10 +145,16 @@ const InterviewRun = () => {
 
   // ✅ 리포트 확인 후 다음 질문으로 이동
   const handleNextQuestion = () => {
-    setReport(null); // 리포트 닫기
-    setAnswerTime(0); // 진행시간 초기화
+    setReport(null);
+    setAnswerTime(0);
     setQuestionIndex((prev) => prev + 1);
     setTime(90);
+
+    // 다음 질문 대비 chunks 초기화 + 다시 녹화 시작
+    chunksRef.current = [];
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state === "inactive") {
+      mediaRecorderRef.current.start(1000);
+    }
   };
 
   return (
@@ -164,7 +200,6 @@ const InterviewRun = () => {
             </div>
           </div>
 
-          {/* 답변 마무리 버튼 (15초 남았을 때만) */}
           {time <= 15 && (
             <div className="button-section">
               <button className="finish-btn" onClick={handleSubmitAnswer}>
