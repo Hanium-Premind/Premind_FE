@@ -1,231 +1,128 @@
-.interview-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100vh;
-  padding: 40px;
-  box-sizing: border-box;
-  background: #fff;
-}
-
-/* -------------------- 질문 화면 -------------------- */
-.question-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 18px;
-
-  .question-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    .question-number {
-      font-weight: bold;
-      font-size: 20px;
-    }
-
-    .question-text {
-      color: #333;
-    }
-  }
-
-  .subtitle-btn {
-    margin-top: 20%;
-    border: 1px solid #4caf50;
-    border-radius: 20px;
-    padding: 6px 16px;
-    color: #4caf50;
-    background: none;
-    font-size: 14px;
-    cursor: pointer;
-
-    &:hover {
-      background: #4caf50;
-      color: white;
-    }
-  }
-}
-
-.answer-section {
-  text-align: center;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  .timer {
-    font-size: 48px;
-    font-weight: bold;
-    margin-bottom: 20px;
-  }
-
-  .answer-text {
-    font-size: 22px;
-    font-weight: 500;
-    margin-bottom: 10px;
-  }
-
-  .answer-info {
-    font-size: 14px;
-    color: #555;
-    line-height: 1.5;
-  }
-}
-
-.button-section {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-
-  .finish-btn {
-    background: #58626C;
-    color: white;
-    border: none;
-    border-radius: 22px;
-    padding: 12px 24px;
-    font-size: 16px;
-    cursor: pointer;
-
-    &:hover {
-      background: #2c3e9d;
-    }
-  }
-}
-
-/* -------------------- 중간 리포트 -------------------- */
 .report-section {
-  text-align: center;
-  padding: 20px;
-
-  h2 {
-    font-size: 24px;
-    margin-bottom: 16px;
-  }
-
-  p {
-    margin: 8px 0;
-    font-size: 16px;
-    color: #444;
-  }
-
-  .next-btn {
-    margin-top: 20px;
-    padding: 12px 28px;
-    font-size: 16px;
-    background: #4caf50;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-
-    &:hover {
-      background: #3e8e41;
-    }
-  }
-  .answer-time{
-    margin-top: 50px;
-  }
-  .report-feedback {
-    margin-top: 20px;
-    text-align: left;
-    line-height: 1.6;
-
-    p {
-      margin-bottom: 12px;
-      font-size: 15px;
-      color: #444;
-    }
-
-    .highlight {
-      color: #4caf50; // ✅ 초록색 강조
-      font-weight: bold;
-    }
-  }
+  flex: 1 0 auto; // 컨텐츠가 남은 공간을 모두 차지하게
+  min-height: 80vh; // 또는 800px 등 이미지 높이에 맞게 조정
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
+.mid-report {
+  background: #fff;
+  border-radius: 18px;
+  padding: 40px 32px 32px 32px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  max-width: 600px;
+  margin: 40px auto 0 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 540px; // 충분한 높이 확보
+  position: relative;
+}
 
-/* -------------------- 최종 리포트 -------------------- */
-.final-report {
-  padding: 40px;
+.mid-report-header {
   text-align: center;
+  margin-bottom: 24px;
+}
 
-  h2 {
-    font-size: 28px;
-    margin-bottom: 20px;
-    font-weight: bold;
-    color: #2c3e50;
-  }
+.mid-report-number {
+  font-size: 2.8rem;
+  font-weight: 600;
+  color: #6c6c6c;
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
 
-  .meta {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 24px;
-  }
+.mid-report-title {
+  font-size: 1.25rem;
+  color: #222;
+  font-weight: 500;
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
 
-  .score-box {
-    background: #f3fdf5;
-    border: 1px solid #e0f2e9;
-    border-radius: 12px;
-    padding: 20px;
-    margin: 0 auto 30px;
-    max-width: 700px;
+.mid-report-body {
+  width: 100%;
+  margin-bottom: 40px; // 푸터와의 간격 확실히 주기
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 90px; // 설명(피드백)과 진행시간 사이 간격 추가
+}
 
-    h3 {
-      font-size: 20px;
-      margin-bottom: 8px;
-    }
+.report-feedback {
+  width: 100%;
+}
+.report-feedback p {
+  margin: 0 0 4px 0;
+  font-size: 1.05rem;
+  color: #444;
+  line-height: 1.7;
+  text-align: left;
+}
 
-    .score {
-      font-size: 48px;
-      font-weight: bold;
-      color: #4caf50;
-      margin-bottom: 12px;
-    }
+.report-feedback .highlight {
+  color: #1ebc8a;
+  font-weight: 600;
+}
 
-    .summary {
-      font-size: 15px;
-      color: #444;
-      line-height: 1.6;
-    }
-  }
+.next-btn {
+  margin-top: 36px;
+  width: 100%;
+  background: #1ebc8a;
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 16px 0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.next-btn:hover {
+  background: #179e72;
+}
 
-  .chart-section {
-    margin: 20px auto;
-    max-width: 600px;
-    background: #fafafa;
-    border-radius: 10px;
-    padding: 16px;
-    text-align: left;
+.mid-report-footer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 60px; 
+  margin-bottom: 0;
+  width: 100%;
+  position: static;
+}
 
-    h4 {
-      font-size: 18px;
-      margin-bottom: 10px;
-      color: #333;
-    }
+.answer-time-label {
+  color: #8a8a8a;
+  font-size: 1rem;
+  background: #f6f6f6;
+  border-radius: 8px 0 0 8px;
+  padding: 8px 18px;
+  margin-top: 0;
+}
 
-    p {
-      margin: 6px 0;
-      font-size: 14px;
-      color: #555;
-    }
-  }
+.answer-time-value {
+  color: #3a3a3a;
+  font-size: 1.1rem;
+  background: #f6f6f6;
+  border-radius: 0 8px 8px 0;
+  padding: 8px 18px;
+  font-family: 'Menlo', 'Consolas', monospace;
+  font-weight: 500;
+}
 
-  .end-btn {
-    margin-top: 30px;
-    padding: 14px 30px;
-    font-size: 16px;
-    background: #2c3e9d;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
+.interview-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+}
 
-    &:hover {
-      background: #1b2a70;
-    }
-  }
+.result-image {
+
+  width: 320px;
+  height: auto;
+  margin: 32px 0 64px 0;
 }

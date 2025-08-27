@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import "../../assets/sass/interviewrun.scss";
+import reportImage from '../../assets/img/report.svg';
 
 const InterviewT = () => {
-  const [time, setTime] = useState(16);
+  const [time, setTime] = useState(18);
   const [questionIndex, setQuestionIndex] = useState(0);
 
   // 하드코딩 질문
@@ -18,7 +19,7 @@ const InterviewT = () => {
   const reports = [
     {
       short_feedback:
-        "사용자는 면접 전반에서 #구조적인 사고력과 #자신감 있는 표현력으로 긍정적인 인상을 남겼습니다. 다만 일부 문장에서 속도가 느려져 전달력이 떨어질 수 있습니다. 다음 질문부터는 #문장의 속도감 조절에 유의하세요.",
+        "사용자는 면접 전반에서 '구조적인 사고력'과 '자신감 있는 표현력'으로 긍정적인 인상을 남겼습니다. 다만 일부 문장에서 속도가 느려져 전달력이 떨어질 수 있습니다. 다음 질문부터는 #문장의 속도감 조절에 유의하세요.",
     },
     {
       short_feedback:
@@ -37,6 +38,13 @@ const InterviewT = () => {
         "새로운 기술 도입 시 #설득 논리와 #데이터 기반 근거가 돋보였습니다. 최종적으로 높은 완성도의 답변입니다.",
     },
   ];
+  const reportTitles = [
+  "“나쁘지 않았지만, 조금 알아듣기 어려웠군”",
+  "“조금 더 구체적인 설명이 필요했어”",
+  "“핵심 개념은 잘 짚었지만, 사례 연결이 아쉬웠군”",
+  "“협상 과정은 좋았지만 감정 관리가 부족했어”",
+  "“논리와 데이터는 좋았지만, 팀 설득 과정이 더 궁금하군”"
+];
 
   const [report, setReport] = useState(null);
   const [subtitleOn, setSubtitleOn] = useState(true);
@@ -94,18 +102,29 @@ const InterviewT = () => {
       setQuestionIndex((prev) => prev + 1);
       setTime(16);
     } else {
+      setReport(null)
       setIsFinished(true);
     }
   };
 
   return (
     <div className="interview-container">
-      {report ? (
+            {report ? (
         // 중간 리포트
-        <div className="report-section">
-          <h2> 0{questionIndex + 1}</h2>
-          <div className="report-feedback">{formatFeedback(report.short_feedback)}</div>
-          <div className="answer-time">답변 진행시간: {answerTime}초</div>
+        <div className="report-section mid-report">
+          <div className="mid-report-header">
+            <h2 className="mid-report-number">{String(questionIndex + 1).padStart(2, "0")}</h2>
+            <div className="mid-report-title">
+              {reportTitles[questionIndex]}
+            </div>
+          </div>
+          <div className="mid-report-body">
+            <div className="report-feedback">{formatFeedback(report.short_feedback)}</div>
+          </div>
+          <div className="mid-report-footer">
+            <div className="answer-time-label" >답변 진행시간</div>
+            <div className="answer-time-value">{formatTime(answerTime)}</div>
+          </div>
           <button className="next-btn" onClick={handleNextQuestion}>
             {questionIndex < questions.length - 1 ? "다음 면접 진행하기" : "면접 종료"}
           </button>
@@ -147,8 +166,7 @@ const InterviewT = () => {
         // 최종 리포트
         <div className="report-section">
           <h2>종합 면접 리포트</h2>
-          <p>총점: 80점</p>
-          <p>전반적으로 구조적인 답변과 자신감이 돋보였습니다. 다만 몇몇 답변은 속도가 느려 전달력이 떨어졌습니다.</p>
+          <img src={reportImage} alt="면접 분석 리포트"className="result-image" style={{ width: "960px", height: "auto", margin: "32px 0" }}/>
         </div>
       )}
     </div>
