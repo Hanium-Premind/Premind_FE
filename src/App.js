@@ -6,6 +6,7 @@ import Interview from './pages/Interview/InterviewMain';
 import Footer from './components/Footer';
 import Login from './pages/signInUp/Login';
 import Signup from './pages/signInUp/SignUp';
+import SignupComplete from "./pages/signInUp/SignUpComplete.jsx";
 import InterviewStart from './pages/Interview/InterviewStart';
 import PortfolioMain from './pages/portfolio/PortfolioMain';
 import Jaso from './pages/portfolio/Jaso';
@@ -30,6 +31,7 @@ const App = () => {
               <Route path="/interview/start" element={<InterviewStart />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/signup/complete" element={<SignupComplete />} />
               <Route path="/portfoliomain" element={<PortfolioMain />} />
               <Route path="/jaso" element={<Jaso />} />
               <Route path="/jasowrite" element={<JasoWrite />} />
