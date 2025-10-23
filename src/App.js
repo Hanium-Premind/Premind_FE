@@ -10,8 +10,8 @@ import InterviewStart from './pages/Interview/InterviewStart';
 import PortfolioMain from './pages/portfolio/PortfolioMain';
 import Jaso from './pages/portfolio/Jaso';
 import JasoWrite from './pages/portfolio/JasoWrite';
-// import InterviewRun from './pages/Interview/InterviewRun';
-import InterviewRunt from './pages/Interview/InterviewRunt';
+import InterviewRun from './pages/Interview/InterviewRun';
+// import InterviewRunt from './pages/Interview/InterviewRunt';
 
 // import Portfolio from './pages/Portfolio';
 // import MyPage from './pages/MyPage';
@@ -33,17 +33,14 @@ const App = () => {
               <Route path="/portfoliomain" element={<PortfolioMain />} />
               <Route path="/jaso" element={<Jaso />} />
               <Route path="/jasowrite" element={<JasoWrite />} />
-              {/* <Route path="/interview/run" element={<InterviewRun />} /> */}
-              <Route path="/interview/runt" element={<InterviewRunt />} />
+              <Route path="/interview/run" element={<InterviewRun />} /> 
+              {/* <Route path="/interview/runt" element={<InterviewRunt />} /> */}
               
-              
-              {/* <Route path="/portfolio" element={<Portfolio />} /> */}
-              {/* <Route path="/mypage" element={<MyPage />} /> */}
               
               
             </Routes>
           </main>
-          {/* <Footer /> */}
+           <Footer />
         </div>
     </Router>
   );

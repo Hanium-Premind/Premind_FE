@@ -25,6 +25,30 @@ const InterviewRun = () => {
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [chunks, setChunks] = useState([]);
 
+  // 🔥 MediaRecorder 세팅 함수
+  const startRecording = (s) => {
+    const recorder = new MediaRecorder(s, {
+      mimeType: "video/webm;codecs=vp8,opus",
+    });
+
+    let localChunks = [];
+
+    recorder.ondataavailable = (e) => {
+      if (e.data.size > 0) {
+        localChunks.push(e.data);
+      }
+    };
+
+    recorder.onstop = () => {
+      setChunks(localChunks); // stop 시점에 저장
+    };
+
+    recorder.start();
+    setMediaRecorder(recorder);
+    setChunks([]); // 새 질문마다 초기화
+    console.log("▶️ MediaRecorder 녹화 시작");
+  };
+
   // ✅ 세션에서 첫 질문 불러오기
   useEffect(() => {
     const saved = sessionStorage.getItem("interviewData");
@@ -42,24 +66,12 @@ const InterviewRun = () => {
     }
   }, []);
 
-  // ✅ 카메라/마이크 시작 + 녹화
+  // ✅ 카메라/마이크 시작
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       .then((s) => {
         setStream(s);
-
-      // 🔥 코덱 지정
-      const recorder = new MediaRecorder(s, {
-        mimeType: "video/webm;codecs=vp8,opus",
-      });
-
-        recorder.ondataavailable = (e) => {
-          if (e.data.size > 0) setChunks((prev) => [...prev, e.data]);
-        };
-
-        setMediaRecorder(recorder);
-        recorder.start(1000);
-        console.log("▶️ MediaRecorder 시작됨");
+        startRecording(s); // 첫 질문 시작 시 바로 녹화
       })
       .catch((err) => console.error("❌ 카메라/마이크 접근 실패:", err));
 
@@ -98,69 +110,67 @@ const InterviewRun = () => {
       mediaRecorder.stop();
     }
 
-    const recordedBlob = new Blob(chunks, { type: "video/webm" });
-    console.log("🎥 Blob 크기:", recordedBlob.size);
-
-    if (recordedBlob.size === 0) {
-      console.error("⚠️ Blob 비어있음 → 영상 없음");
-      return;
-    }
-
-    try {
-      const token = localStorage.getItem("accessToken");
-
-      const formData = new FormData();
-      formData.append("job_id", String(meta.job_id));       // Text
-      formData.append("file", recordedBlob, "answer.webm"); // File
-      formData.append("answer_time", String(answerTime));   // Text
-
-      console.log("📤 FormData:", [...formData.entries()]);
-
-      const res = await axios.post(
-        `http://52.78.218.243:8080/interviews/practice/submit/${meta.interview_record_id}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,   // ✅ 토큰 포함
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      console.log("✅ 서버 응답:", res.data);
-      const result = res.data.data;
-
-      if (result.finished) {
-        // ✅ 마지막 질문 → 종합 리포트 표시
-        setIsFinished(true);
-        setFinalReport(result.report);
-      } else {
-        // ✅ 개별 질문 피드백
-        setReport({ short_feedback: result.short_feedback });
-        if (result.next_question) {
-          setQuestions((prev) => [...prev, result.next_question]);
-        }
+    // stop 이벤트에서 chunks 세팅됨 → 약간 지연 필요
+    setTimeout(async () => {
+      if (chunks.length === 0) {
+        console.error("⚠️ 녹화된 영상 없음");
+        return;
       }
-    } catch (err) {
-      console.error("❌ 제출 실패:", err.response?.status, err.response?.data || err.message);
-    }
+
+      const recordedBlob = new Blob(chunks, { type: "video/webm" });
+      console.log("🎥 Blob 크기:", recordedBlob.size);
+
+      try {
+        const accessToken = localStorage.getItem("accessToken");
+        console.log("accessToken:", accessToken);
+
+        const formData = new FormData();
+        formData.append("job_id", String(meta.job_id));
+        formData.append("file", recordedBlob, "answer.webm");
+        formData.append("answer_time", String(answerTime));
+
+        console.log("📤 FormData:", [...formData.entries()]);
+
+        const res = await axios.post(
+          `http://52.78.218.243:8080/interviews/practice/submit/${meta.interview_record_id}`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        console.log("✅ 서버 응답:", res.data);
+        const result = res.data.data;
+
+        if (result.finished) {
+          // ✅ 마지막 질문 → 종합 리포트 표시
+          setIsFinished(true);
+          setFinalReport(result.report);
+        } else {
+          // ✅ 개별 질문 피드백
+          setReport({ short_feedback: result.short_feedback });
+          if (result.next_question) {
+            setQuestions((prev) => [...prev, result.next_question]);
+          }
+        }
+      } catch (err) {
+        console.error("❌ 제출 실패:", err.response?.status, err.response?.data || err.message);
+      }
+    }, 500); // onstop 후 chunks 저장 대기
   };
 
   // ✅ 다음 질문으로 이동
   const handleNextQuestion = () => {
     setReport(null);
     setAnswerTime(0);
-    setChunks([]);
-    setQuestionIndex((prev) => prev + 1);
     setTime(90);
+    setQuestionIndex((prev) => prev + 1);
 
     if (stream) {
-      const newRecorder = new MediaRecorder(stream, { mimeType: "video/webm" });
-      newRecorder.ondataavailable = (e) => {
-        if (e.data.size > 0) setChunks((prev) => [...prev, e.data]);
-      };
-      setMediaRecorder(newRecorder);
-      newRecorder.start(1000);
+      startRecording(stream); // 새 질문 시작 시 다시 녹화
     }
   };
 

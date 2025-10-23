@@ -50,7 +50,7 @@ export default function InterviewStart() {
   }, [stream]);
 
   const handleStart = () => {
-    navigate("/interview/runt"); 
+    navigate("/interview/run"); 
   };
 
   return (
