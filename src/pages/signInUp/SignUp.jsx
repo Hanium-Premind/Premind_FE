@@ -1,47 +1,56 @@
 import { useState } from "react";
-import VerifyModal from "../signInUp/VerifyModal";
+import { useNavigate } from "react-router-dom";
 import "../../assets/sass/signinup.scss";
+import VerifyModal from "./VerifyModal"; // 본인 인증 모달
 
 export default function Signup() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     username: "",
     password: "",
-    passwordConfirm: "",
+    confirmPassword: "",
     name: "",
-    birth: "",
+    birthYear: "",
+    birthMonth: "",
+    birthDay: "",
     gender: "",
-    phoneNumber: "",
   });
 
-  const [verified, setVerified] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [verified, setVerified] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleOpenModal = () => {
-    if (!form.name || !form.phoneNumber) {
-      alert("이름과 전화번호를 입력해주세요.");
+  const handleGender = (gender) => {
+    setForm({ ...form, gender });
+  };
+
+  const handleVerify = () => {
+    // 모든 입력이 완료된 경우만 본인 인증 열기
+    if (
+      !form.username ||
+      !form.password ||
+      !form.confirmPassword ||
+      !form.name ||
+      !form.birthYear ||
+      !form.birthMonth ||
+      !form.birthDay ||
+      !form.gender
+    ) {
+      alert("모든 항목을 입력해주세요.");
       return;
     }
     setShowModal(true);
   };
 
-  const handleVerifySuccess = () => {
-    setVerified(true);
-    setShowModal(false);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSignup = () => {
     if (!verified) {
-      alert("본인인증을 완료해주세요.");
+      alert("본인 인증을 완료해주세요.");
       return;
     }
-    alert("회원가입 완료!");
-    window.location.href = "/signup/complete";
+    navigate("/signup/complete");
   };
 
   return (
@@ -49,106 +58,117 @@ export default function Signup() {
       <h2 className="signup-title">회원가입</h2>
       <p className="required-info">*는 필수항목 입니다.</p>
 
-      <form className="signup-form" onSubmit={handleSubmit}>
-        <div className="form-row">
-          <label>아이디*</label>
+      <form className="signup-form">
+        <div className="form-grid">
+          <label htmlFor="username">아이디*</label>
           <input
+            type="text"
+            id="username"
             name="username"
             value={form.username}
             onChange={handleChange}
             placeholder="ID"
             required
           />
-        </div>
 
-        <div className="form-row">
-          <label>비밀번호*</label>
+          <label htmlFor="password">비밀번호*</label>
           <input
-            name="password"
             type="password"
+            id="password"
+            name="password"
             value={form.password}
             onChange={handleChange}
             placeholder="PASSWORD"
             required
           />
-        </div>
 
-        <div className="form-row">
-          <label>비밀번호 확인*</label>
+          <label htmlFor="confirmPassword">비밀번호 확인*</label>
           <input
-            name="passwordConfirm"
             type="password"
-            value={form.passwordConfirm}
+            id="confirmPassword"
+            name="confirmPassword"
+            value={form.confirmPassword}
             onChange={handleChange}
-            placeholder="PASSWORD 확인"
+            placeholder="비밀번호 재입력"
             required
           />
-        </div>
 
-        <div className="form-row">
-          <label>이름*</label>
+          <label htmlFor="name">이름*</label>
           <input
+            type="text"
+            id="name"
             name="name"
             value={form.name}
             onChange={handleChange}
-            placeholder="이름"
+            placeholder="이름 입력"
             required
           />
-        </div>
 
-        <div className="form-row">
           <label>생년월일*</label>
-          <input
-            name="birth"
-            value={form.birth}
-            onChange={handleChange}
-            placeholder="YYYYMMDD"
-            required
-          />
-        </div>
+          <div className="birth-inputs">
+            <input
+              type="text"
+              name="birthYear"
+              maxLength="4"
+              placeholder="YYYY"
+              value={form.birthYear}
+              onChange={handleChange}
+            />
+            <span>년</span>
+            <input
+              type="text"
+              name="birthMonth"
+              maxLength="2"
+              placeholder="MM"
+              value={form.birthMonth}
+              onChange={handleChange}
+            />
+            <span>월</span>
+            <input
+              type="text"
+              name="birthDay"
+              maxLength="2"
+              placeholder="DD"
+              value={form.birthDay}
+              onChange={handleChange}
+            />
+            <span>일</span>
+          </div>
 
-        <div className="form-row gender-row">
           <label>성별*</label>
           <div className="gender-btns">
             <button
               type="button"
               className={form.gender === "FEMALE" ? "active" : ""}
-              onClick={() => setForm((f) => ({ ...f, gender: "FEMALE" }))}
+              onClick={() => handleGender("FEMALE")}
             >
               여성
             </button>
             <button
               type="button"
               className={form.gender === "MALE" ? "active" : ""}
-              onClick={() => setForm((f) => ({ ...f, gender: "MALE" }))}
+              onClick={() => handleGender("MALE")}
             >
               남성
             </button>
           </div>
         </div>
 
-        <div className="form-row">
-          <label>전화번호*</label>
-          <input
-            name="phoneNumber"
-            value={form.phoneNumber}
-            onChange={handleChange}
-            placeholder="010-0000-0000"
-            required
-          />
-        </div>
-
         <div className="verify-row">
           <button
             type="button"
-            className="verify-btn"
-            onClick={handleOpenModal}
+            className={`verify-btn ${verified ? "complete" : ""}`}
+            onClick={handleVerify}
           >
             {verified ? "본인 인증 완료" : "본인 인증"}
           </button>
         </div>
 
-        <button type="submit" className="submit-btn">
+        <button
+          type="button"
+          className="submit-btn"
+          onClick={handleSignup}
+        >
           회원가입
         </button>
       </form>
@@ -156,9 +176,11 @@ export default function Signup() {
       {showModal && (
         <VerifyModal
           name={form.name}
-          phone={form.phoneNumber}
           onClose={() => setShowModal(false)}
-          onSuccess={handleVerifySuccess}
+          onVerified={() => {
+            setVerified(true);
+            setShowModal(false);
+          }}
         />
       )}
     </div>

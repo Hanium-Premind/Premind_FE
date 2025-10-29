@@ -1,0 +1,274 @@
+/* ======================================================
+   ✅ portfolio.scss — PREMIND 포트폴리오 (비율 조정 버전)
+   ====================================================== */
+
+.portfolio-page {
+  background-color: #fafafa;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center; /* 수직 중앙 정렬 */
+  padding: 80px 0;
+}
+
+/* -------------------------------
+   컨테이너 레이아웃
+--------------------------------*/
+.portfolio-container {
+  background: #fff;
+  border-radius: 16px;
+  padding: 60px 80px;
+  width: 100%;
+  max-width: 720px; /* 📏 화면 너비에 비례한 폼 크기 */
+  min-height: 720px; /* 세로 비율 유지 */
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  @media (max-width: 1024px) {
+    max-width: 640px;
+    padding: 50px 60px;
+  }
+
+  @media (max-width: 768px) {
+    max-width: 90%;
+    padding: 40px 24px;
+  }
+}
+
+/* -------------------------------
+   제목
+--------------------------------*/
+.page-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 40px;
+
+  @media (max-width: 768px) {
+    font-size: 22px;
+    margin-bottom: 28px;
+  }
+}
+
+/* -------------------------------
+   폼 구조
+--------------------------------*/
+.portfolio-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 24px;
+
+  @media (max-width: 768px) {
+    gap: 18px;
+  }
+}
+
+/* -------------------------------
+   입력 필드
+--------------------------------*/
+.input-title {
+  width: 100%;
+  border: 1px solid #c4d8cc;
+  border-radius: 6px;
+  padding: 14px 16px;
+  font-size: 15px;
+  color: #333;
+  outline: none;
+  transition: 0.2s;
+
+  &::placeholder {
+    color: #aaa;
+  }
+
+  &:focus {
+    border-color: #4b8b63;
+  }
+}
+
+/* -------------------------------
+   파일 업로드
+--------------------------------*/
+.file-upload {
+  width: 100%;
+  border: 1px solid #c4d8cc;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  padding: 16px;
+  text-align: center;
+  font-size: 15px;
+  color: #777;
+  cursor: pointer;
+  transition: 0.2s;
+
+  label {
+    display: block;
+    cursor: pointer;
+  }
+
+  input[type="file"] {
+    display: none;
+  }
+
+  &:hover {
+    background-color: #f3f3f3;
+  }
+}
+
+/* -------------------------------
+   커스텀 드롭다운
+--------------------------------*/
+.dropdown {
+  position: relative;
+  width: 100%;
+  font-size: 15px;
+}
+
+.dropdown-header {
+  border: 1px solid #c4d8cc;
+  border-radius: 6px;
+  padding: 14px 16px;
+  text-align: left;
+  color: #333;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .arrow {
+    font-size: 12px;
+    color: #666;
+  }
+
+  &.open {
+    border-color: #4b8b63;
+  }
+
+  &:hover {
+    background-color: #f6f6f6;
+  }
+}
+
+.dropdown-list {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  right: 0;
+  border: 1px solid #c4d8cc;
+  border-top: none;
+  background: #fff;
+  z-index: 10;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+
+  li {
+    padding: 12px 16px;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.15s ease;
+    color: #333;
+
+    &:hover {
+      background-color: #edf6f0;
+      color: #4b8b63;
+    }
+  }
+}
+
+/* -------------------------------
+   답변 입력
+--------------------------------*/
+.textarea-answer {
+  width: 100%;
+  height: 180px;
+  border: 1px solid #c4d8cc;
+  border-radius: 6px;
+  padding: 14px 16px;
+  font-size: 15px;
+  resize: none;
+  color: #333;
+  outline: none;
+  transition: 0.2s;
+
+  &::placeholder {
+    color: #aaa;
+  }
+
+  &:focus {
+    border-color: #4b8b63;
+  }
+}
+
+/* -------------------------------
+   버튼 영역
+--------------------------------*/
+.add-question-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: #4b8b63;
+  color: #fff;
+  font-size: 22px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background-color: #3b6f53;
+  }
+}
+
+.submit-btn {
+  background-color: #4b8b63;
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 12px 40px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s;
+  align-self: flex-end; /* 오른쪽 정렬 */
+
+  &:hover {
+    background-color: #3e7f5d;
+  }
+}
+
+/* -------------------------------
+   반응형 대응
+--------------------------------*/
+@media (max-width: 768px) {
+  .portfolio-page {
+    padding: 40px 0;
+  }
+
+  .portfolio-container {
+    padding: 40px 24px;
+    min-height: auto;
+  }
+
+  .page-title {
+    font-size: 22px;
+  }
+
+  .portfolio-form {
+    gap: 16px;
+  }
+
+  .input-title,
+  .textarea-answer {
+    font-size: 14px;
+  }
+}

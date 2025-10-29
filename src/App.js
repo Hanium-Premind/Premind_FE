@@ -13,8 +13,7 @@ import Jaso from './pages/portfolio/Jaso';
 import JasoWrite from './pages/portfolio/JasoWrite';
 import InterviewRun from './pages/Interview/InterviewRun';
 // import InterviewRunt from './pages/Interview/InterviewRunt';
-
-// import Portfolio from './pages/Portfolio';
+import Portfolio from './pages/portfolio/Portfolio';
 // import MyPage from './pages/MyPage';
 
 
@@ -34,12 +33,11 @@ const App = () => {
               <Route path="/signup/complete" element={<SignupComplete />} />
               <Route path="/portfoliomain" element={<PortfolioMain />} />
               <Route path="/jaso" element={<Jaso />} />
+              <Route path="/portfolio" element={<Portfolio />} />
               <Route path="/jasowrite" element={<JasoWrite />} />
               <Route path="/interview/run" element={<InterviewRun />} /> 
               {/* <Route path="/interview/runt" element={<InterviewRunt />} /> */}
-              
-              
-              
+
             </Routes>
           </main>
            <Footer />
