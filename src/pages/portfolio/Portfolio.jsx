@@ -38,7 +38,7 @@ export default function Portfolio() {
   };
 
   return (
-    <div className="portfolio-page">
+    <div className="page portfolio-page">
       <div className="portfolio-container">
         <h2 className="page-title">포트폴리오</h2>
 
