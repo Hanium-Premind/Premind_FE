@@ -14,8 +14,7 @@ import JasoWrite from './pages/portfolio/JasoWrite';
 import InterviewRun from './pages/Interview/InterviewRun';
 // import InterviewRunt from './pages/Interview/InterviewRunt';
 import Portfolio from './pages/portfolio/Portfolio';
-// import MyPage from './pages/MyPage';
-
+import InterR from './pages/Interview/InterviewResult';
 
 const App = () => {
   return (
@@ -36,6 +35,7 @@ const App = () => {
               <Route path="/portfolio" element={<Portfolio />} />
               <Route path="/jasowrite" element={<JasoWrite />} />
               <Route path="/interview/run" element={<InterviewRun />} /> 
+              <Route path="/interview-result" element={<InterR />} />
               {/* <Route path="/interview/runt" element={<InterviewRunt />} /> */}
 
             </Routes>

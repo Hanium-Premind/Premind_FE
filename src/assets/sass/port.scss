@@ -1,72 +1,53 @@
 /* ======================================================
-   ✅ portfolio.scss — PREMIND 포트폴리오 (비율 조정 버전)
+   ✅ portfolio.scss — PREMIND 포트폴리오 (노트북 비율 최적화)
    ====================================================== */
 
 .portfolio-page {
   background-color: #fafafa;
-  min-height: 100vh;
-
+  height: 100dvh; /* 브라우저 높이에 맞게 딱 맞춤 */
   display: flex;
   justify-content: center;
-  align-items: center; /* 수직 중앙 정렬 */
-  padding: 80px 0;
+  align-items: center;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 /* -------------------------------
-   컨테이너 레이아웃
+   컨테이너 (정중앙 배치 + 세로 비율 최소화)
 --------------------------------*/
 .portfolio-container {
   background: #fff;
   border-radius: 16px;
-  padding: 60px 80px;
-  width: 100%;
-  max-width: 720px; /* 📏 화면 너비에 비례한 폼 크기 */
-  min-height: 720px; /* 세로 비율 유지 */
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+  width: 90%;
+  max-width: 720px;
+  padding: 5vh 6vw; /* ✅ 고정 px 대신 뷰포트 비율 */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
-
-  @media (max-width: 1024px) {
-    max-width: 640px;
-    padding: 50px 60px;
-  }
-
-  @media (max-width: 768px) {
-    max-width: 90%;
-    padding: 40px 24px;
-  }
+  justify-content: center; /* 수직 중심 정렬 */
+  text-align: center;
 }
 
 /* -------------------------------
    제목
 --------------------------------*/
 .page-title {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 600;
   color: #444;
-  margin-bottom: 40px;
-
-  @media (max-width: 768px) {
-    font-size: 22px;
-    margin-bottom: 28px;
-  }
+  margin-bottom: 28px;
 }
 
 /* -------------------------------
-   폼 구조
+   폼
 --------------------------------*/
 .portfolio-form {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  gap: 24px;
-
-  @media (max-width: 768px) {
-    gap: 18px;
-  }
+  gap: 18px; /* 여백 축소 */
 }
 
 /* -------------------------------
@@ -76,7 +57,7 @@
   width: 100%;
   border: 1px solid #c4d8cc;
   border-radius: 6px;
-  padding: 14px 16px;
+  padding: 12px 14px;
   font-size: 15px;
   color: #333;
   outline: none;
@@ -99,7 +80,7 @@
   border: 1px solid #c4d8cc;
   border-radius: 6px;
   background-color: #f9f9f9;
-  padding: 16px;
+  padding: 14px;
   text-align: center;
   font-size: 15px;
   color: #777;
@@ -132,7 +113,7 @@
 .dropdown-header {
   border: 1px solid #c4d8cc;
   border-radius: 6px;
-  padding: 14px 16px;
+  padding: 12px 14px;
   text-align: left;
   color: #333;
   background: #fff;
@@ -170,7 +151,7 @@
   overflow: hidden;
 
   li {
-    padding: 12px 16px;
+    padding: 10px 14px;
     text-align: left;
     cursor: pointer;
     transition: 0.15s ease;
@@ -188,10 +169,10 @@
 --------------------------------*/
 .textarea-answer {
   width: 100%;
-  height: 180px;
+  height: 140px; /* ✅ 너무 길지 않게 조정 */
   border: 1px solid #c4d8cc;
   border-radius: 6px;
-  padding: 14px 16px;
+  padding: 12px 14px;
   font-size: 15px;
   resize: none;
   color: #333;
@@ -211,8 +192,8 @@
    버튼 영역
 --------------------------------*/
 .add-question-btn {
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background-color: #4b8b63;
   color: #fff;
@@ -234,41 +215,13 @@
   color: #fff;
   border: none;
   border-radius: 25px;
-  padding: 12px 40px;
-  font-size: 16px;
+  padding: 10px 36px;
+  font-size: 15px;
   font-weight: 500;
   cursor: pointer;
   transition: 0.2s;
-  align-self: flex-end; /* 오른쪽 정렬 */
 
   &:hover {
     background-color: #3e7f5d;
-  }
-}
-
-/* -------------------------------
-   반응형 대응
---------------------------------*/
-@media (max-width: 768px) {
-  .portfolio-page {
-    padding: 40px 0;
-  }
-
-  .portfolio-container {
-    padding: 40px 24px;
-    min-height: auto;
-  }
-
-  .page-title {
-    font-size: 22px;
-  }
-
-  .portfolio-form {
-    gap: 16px;
-  }
-
-  .input-title,
-  .textarea-answer {
-    font-size: 14px;
   }
 }

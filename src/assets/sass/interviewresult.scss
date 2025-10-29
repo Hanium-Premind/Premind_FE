@@ -1,0 +1,120 @@
+/* ======================================================
+   ✅ interviewresult.scss — PREMIND 면접 결과 페이지
+   ====================================================== */
+
+.interview-result-page {
+  background-color: #fafafa;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 100px;
+}
+
+.interview-container {
+  width: 80%;
+  max-width: 960px;
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 60px 80px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  text-align: center;
+
+}
+
+/* 제목 */
+.page-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 40px;
+}
+
+/* 필터 버튼 */
+.filter-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 30px;
+
+  button {
+    border: 1.5px solid #4b8b63;
+    background-color: transparent;
+    color: #4b8b63;
+    border-radius: 20px;
+    padding: 8px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &.active {
+      background-color: #4b8b63;
+      color: #fff;
+    }
+
+    &:hover {
+      background-color: #4b8b63;
+      color: #fff;
+    }
+  }
+}
+
+/* 결과 테이블 */
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+  color: #333;
+
+  th {
+    font-weight: 600;
+    color: #666;
+    padding: 14px 8px;
+    border-bottom: 2px solid #e0e0e0;
+  }
+
+  td {
+    padding: 14px 8px;
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
+  }
+
+  .date-cell {
+    display: flex;
+    flex-direction: column;
+
+    .date {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .title {
+      color: #888;
+      font-size: 13px;
+      margin-top: 2px;
+    }
+  }
+
+  .mode-cell {
+    color: #4b8b63;
+    font-weight: 600;
+  }
+
+  .more-cell {
+    text-align: right;
+    font-size: 20px;
+    color: #999;
+    cursor: pointer;
+
+    &:hover {
+      color: #4b8b63;
+    }
+  }
+
+  tbody tr:hover {
+    background-color: #f9fdfb;
+    transition: 0.2s;
+  }
+}
+

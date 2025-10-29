@@ -33,7 +33,7 @@ export default function Navbar() {
 
       <ul className="navbar__menu">
         <li onClick={() => navigate('/interview')}>모의 면접</li>
-        <li onClick={() => navigate('/interview-records')}>면접 결과</li>
+        <li onClick={() => navigate('/interview-result')}>면접 결과</li>
         <li onClick={() => navigate('/portfoliomain')}>자소서/포트폴리오</li>
         <li onClick={() => navigate('/mypage')}>마이페이지</li>
       </ul>
