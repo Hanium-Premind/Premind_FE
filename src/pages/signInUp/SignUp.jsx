@@ -1,186 +1,215 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import VerifyModal from "./VerifyModal";
 import "../../assets/sass/signinup.scss";
-import VerifyModal from "./VerifyModal"; // 본인 인증 모달
 
 export default function Signup() {
-  const navigate = useNavigate();
   const [form, setForm] = useState({
     username: "",
     password: "",
     confirmPassword: "",
     name: "",
-    birthYear: "",
-    birthMonth: "",
-    birthDay: "",
+    birth: { year: "", month: "", day: "" },
     gender: "",
   });
 
-  const [showModal, setShowModal] = useState(false);
-  const [verified, setVerified] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleGender = (gender) => {
-    setForm({ ...form, gender });
+  const isFormValid =
+    form.username &&
+    form.password &&
+    form.confirmPassword &&
+    form.password === form.confirmPassword &&
+    form.name &&
+    form.birth.length === 8 &&
+    form.gender;
+
+  const handleVerificationSuccess = () => {
+    setIsVerified(true);
+    setIsModalOpen(false);
   };
 
-  const handleVerify = () => {
-    // 모든 입력이 완료된 경우만 본인 인증 열기
-    if (
-      !form.username ||
-      !form.password ||
-      !form.confirmPassword ||
-      !form.name ||
-      !form.birthYear ||
-      !form.birthMonth ||
-      !form.birthDay ||
-      !form.gender
-    ) {
-      alert("모든 항목을 입력해주세요.");
-      return;
-    }
-    setShowModal(true);
-  };
-
-  const handleSignup = () => {
-    if (!verified) {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!isVerified) {
       alert("본인 인증을 완료해주세요.");
       return;
     }
-    navigate("/signup/complete");
+    alert("🎉 회원가입이 완료되었습니다!");
   };
 
   return (
-    <div className="signup-page">
-      <h2 className="signup-title">회원가입</h2>
-      <p className="required-info">*는 필수항목 입니다.</p>
+        <div className="signup-page">
+        <div className="signup-container">
+            {/* 제목 및 안내문 */}
+            <h2 className="signup-title">회원가입</h2>
+            <div className="signup-subtext-wrapper">
+            <p className="signup-subtext">*는 필수항목 입니다.</p>
+            </div>
 
-      <form className="signup-form">
-        <div className="form-grid">
-          <label htmlFor="username">아이디*</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            value={form.username}
-            onChange={handleChange}
-            placeholder="ID"
-            required
-          />
-
-          <label htmlFor="password">비밀번호*</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            placeholder="PASSWORD"
-            required
-          />
-
-          <label htmlFor="confirmPassword">비밀번호 확인*</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-            value={form.confirmPassword}
-            onChange={handleChange}
-            placeholder="비밀번호 재입력"
-            required
-          />
-
-          <label htmlFor="name">이름*</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            placeholder="이름 입력"
-            required
-          />
-
-          <label>생년월일*</label>
-          <div className="birth-inputs">
+        <form className="signup-form" onSubmit={handleSubmit}>
+          {/* 아이디 */}
+          <div className="form-grid">
+            <label htmlFor="username">아이디*</label>
             <input
+              id="username"
+              name="username"
               type="text"
-              name="birthYear"
-              maxLength="4"
-              placeholder="YYYY"
-              value={form.birthYear}
+              placeholder="ID"
+              value={form.username}
               onChange={handleChange}
+              required
             />
-            <span>년</span>
-            <input
-              type="text"
-              name="birthMonth"
-              maxLength="2"
-              placeholder="MM"
-              value={form.birthMonth}
-              onChange={handleChange}
-            />
-            <span>월</span>
-            <input
-              type="text"
-              name="birthDay"
-              maxLength="2"
-              placeholder="DD"
-              value={form.birthDay}
-              onChange={handleChange}
-            />
-            <span>일</span>
           </div>
 
-          <label>성별*</label>
-          <div className="gender-btns">
-            <button
-              type="button"
-              className={form.gender === "FEMALE" ? "active" : ""}
-              onClick={() => handleGender("FEMALE")}
-            >
-              여성
-            </button>
-            <button
-              type="button"
-              className={form.gender === "MALE" ? "active" : ""}
-              onClick={() => handleGender("MALE")}
-            >
-              남성
-            </button>
+          {/* 비밀번호 */}
+          <div className="form-grid">
+            <label htmlFor="password">비밀번호*</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="PASSWORD"
+              value={form.password}
+              onChange={handleChange}
+              required
+            />
           </div>
-        </div>
 
-        <div className="verify-row">
-          <button
-            type="button"
-            className={`verify-btn ${verified ? "complete" : ""}`}
-            onClick={handleVerify}
-          >
-            {verified ? "본인 인증 완료" : "본인 인증"}
-          </button>
-        </div>
+          {/* 비밀번호 확인 */}
+          <div className="form-grid">
+            <label htmlFor="confirmPassword">비밀번호 확인*</label>
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              placeholder="PASSWORD 확인"
+              value={form.confirmPassword}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-        <button
-          type="button"
-          className="submit-btn"
-          onClick={handleSignup}
-        >
-          회원가입
-        </button>
-      </form>
+          {/* 이름 */}
+          <div className="form-grid">
+            <label htmlFor="name">이름*</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              placeholder="이름"
+              value={form.name}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-      {showModal && (
+          {/* 생년월일 */}
+<div className="form-grid">
+            <label>생년월일*</label>
+            <div className="birth-inputs">
+              <input
+                type="text"
+                placeholder="0000"
+                maxLength="4"
+                value={form.birth.year}
+                onChange={(e) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    birth: { ...prev.birth, year: e.target.value },
+                  }))
+                }
+              />
+              <span>년</span>
+              <input
+                type="text"
+                placeholder="00"
+                maxLength="2"
+                value={form.birth.month}
+                onChange={(e) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    birth: { ...prev.birth, month: e.target.value },
+                  }))
+                }
+              />
+              <span>월</span>
+              <input
+                type="text"
+                placeholder="00"
+                maxLength="2"
+                value={form.birth.day}
+                onChange={(e) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    birth: { ...prev.birth, day: e.target.value },
+                  }))
+                }
+              />
+              <span>일</span>
+            </div>
+          </div>
+
+          {/* 성별 */}
+          <div className="form-grid">
+            <label>성별*</label>
+            <div className="gender-btns">
+              <button
+                type="button"
+                className={form.gender === "FEMALE" ? "active" : ""}
+                onClick={() => setForm((p) => ({ ...p, gender: "FEMALE" }))}
+              >
+                여성
+              </button>
+              <button
+                type="button"
+                className={form.gender === "MALE" ? "active" : ""}
+                onClick={() => setForm((p) => ({ ...p, gender: "MALE" }))}
+              >
+                남성
+              </button>
+            </div>
+          </div>
+
+            {/* 본인인증 + 회원가입 */}
+            <div className="verify-row">
+            <button
+                type="button"
+                className={`verify-btn ${isFormValid ? "active" : ""} ${
+                isVerified ? "verified" : ""
+                }`}
+                disabled={!isFormValid || isVerified}
+                onClick={() => {
+                if (!isVerified) setIsModalOpen(true);
+                }}
+            >
+                {isVerified ? "본인 인증 완료" : "본인 인증"}
+            </button>
+
+            <button
+                type="submit"
+                className={`submit-btn ${isVerified ? "active" : ""}`}
+                disabled={!isVerified}
+            >
+                회원가입
+            </button>
+            </div>
+
+        </form>
+      </div>
+
+      {/* 모달 */}
+      {isModalOpen && (
         <VerifyModal
           name={form.name}
-          onClose={() => setShowModal(false)}
-          onVerified={() => {
-            setVerified(true);
-            setShowModal(false);
-          }}
+          phone={form.phone}
+          onClose={() => setIsModalOpen(false)}
+          onSuccess={handleVerificationSuccess}
         />
       )}
     </div>

@@ -23,7 +23,7 @@
   --navbar-height: 80px;     /* 네비게이션 높이 */
   --footer-height: 100px;    /* 푸터 높이 */
   --page-max-width: 1280px;  /* 중앙 정렬 컨테이너 최대폭 */
-  --main-bg: #fafafa;        /* 기본 배경 */
+  //--main-bg: #fafafa;        /* 기본 배경 */
 }
 
 /* ----------------------------
@@ -56,7 +56,7 @@
   position: static;
   height: var(--footer-height);
   background-color: #fff;
-  border-top: 1px solid #e5e5e5;
+  //border-top: 1px solid #e5e5e5;
   display: flex;
   justify-content: center;
   align-items: center;
