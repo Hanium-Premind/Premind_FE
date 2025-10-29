@@ -6,38 +6,31 @@ const InterviewResult = () => {
 
   const data = [
     {
-      date: "2025.07.08_2",
-      title: "라라라 제약회사 등",
+      date: "2025.07.08",
+      title: "000회사",
       type: "포트폴리오",
-      score: "본인 점수/완전합격",
+      score: "78/100",
       mode: "실전모드",
     },
     {
-      date: "2025.07.08_1",
-      title: "라라라 제약회사 등",
+      date: "2025.07.08",
+      title: "111회사",
       type: "포트폴리오",
-      score: "본인 점수/완전합격",
+      score: "68/100",
       mode: "실전모드",
     },
     {
       date: "2025.06.27",
-      title: "라라라 제약회사 등",
+      title: "222회사",
       type: "자기소개서",
-      score: "본인 점수/완전합격",
+      score: "77/100",
       mode: "연습모드",
     },
     {
-      date: "2025.06.02",
-      title: "라라라 제약회사 등",
-      type: "자기소개서",
-      score: "본인 점수/완전합격",
-      mode: "실전모드",
-    },
-    {
       date: "2025.05.25",
-      title: "라라라 제약회사 등",
+      title: "333회사",
       type: "자기소개서",
-      score: "본인 점수/완전합격",
+      score: "89/100",
       mode: "반복모드",
     },
   ];
@@ -48,7 +41,7 @@ const InterviewResult = () => {
       : data.filter((item) => item.mode === activeFilter);
 
   return (
-    <div className="interview-result-page">
+    <div className="page interview-result-page">
       <div className="interview-container">
         <h2 className="page-title">면접 결과</h2>
 

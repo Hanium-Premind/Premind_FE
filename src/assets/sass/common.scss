@@ -1,26 +1,100 @@
-*{
+/* ----------------------------
+   Global Reset & Font
+----------------------------- */
+* {
   font-family: 'Pretendard Variable';
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
+
 @font-face {
-	font-family: 'Pretendard Variable';
-	font-weight: 45 920;
-	font-style: normal;
-	font-display: swap;
-	src: url('./variable/woff2/PretendardVariable.woff2') format('woff2-variations');
+  font-family: 'Pretendard Variable';
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+  src: url('./variable/woff2/PretendardVariable.woff2') format('woff2-variations');
 }
 
+/* ----------------------------
+   Root Variables (전역 레이아웃 기준)
+----------------------------- */
+:root {
+  --navbar-height: 80px;     /* 네비게이션 높이 */
+  --footer-height: 100px;    /* 푸터 높이 */
+  --page-max-width: 1280px;  /* 중앙 정렬 컨테이너 최대폭 */
+  --main-bg: #fafafa;        /* 기본 배경 */
+}
+
+/* ----------------------------
+   App Layout
+----------------------------- */
 .app-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;  
-
+  min-height: 100dvh; /* ✅ 100vh → 100dvh (브라우저 동적 높이 대응) */
+  background-color: var(--main-bg);
 }
+
+/* ----------------------------
+   Main Content Wrapper
+----------------------------- */
 .app-content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* ✅ 세로 중앙 정렬 */
+  align-items: center;
+  min-height: calc(100dvh - var(--navbar-height) - var(--footer-height)); /* ✅ 비율 고정 */
+  width: 100%;
 }
+
+/* ----------------------------
+   Footer
+----------------------------- */
 .footer {
-  position: static;    
+  position: static;
+  height: var(--footer-height);
+  background-color: #fff;
+  border-top: 1px solid #e5e5e5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 13px;
+  color: #666;
+}
+
+/* ----------------------------
+   공통 페이지 스타일 (선택적으로 import)
+----------------------------- */
+.page {
+  min-height: calc(100dvh - var(--navbar-height) - var(--footer-height));
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--main-bg);
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+/* ----------------------------
+   반응형 대응
+----------------------------- */
+@media (max-width: 1024px) {
+  :root {
+    --navbar-height: 70px;
+    --footer-height: 80px;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --navbar-height: 60px;
+    --footer-height: 70px;
+  }
+
+  .footer {
+    font-size: 12px;
+  }
 }
